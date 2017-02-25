@@ -1,4 +1,8 @@
-package com.jasonbutwell.popularmovies;
+package com.jasonbutwell.popularmovies.Utils;
+
+import com.jasonbutwell.popularmovies.Api.TMDBHelper;
+import com.jasonbutwell.popularmovies.Api.TMDBInfo;
+import com.jasonbutwell.popularmovies.Model.MovieItem;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -10,13 +14,13 @@ import java.util.ArrayList;
  * Created by J on 22/01/2017.
  */
 
-final class JSONUtils {
+public class JSONUtils {
 
     private static ArrayList<MovieItem> movies = new ArrayList<>();
 
     private JSONUtils() {}
 
-    static String extractJSONString( String JSONData, String extractString ) {
+    public static String extractJSONString( String JSONData, String extractString ) {
         String JSONString = null;
 
         try {
@@ -30,7 +34,11 @@ final class JSONUtils {
         return JSONString;
     }
 
-    static ArrayList<MovieItem> extractJSONArray(String JSONData)  {
+    public static JSONObject getJSONObject( String JSONData ) throws JSONException {
+        return new JSONObject( JSONData);
+    }
+
+    public static ArrayList<MovieItem> extractJSONArray(String JSONData)  {
 
         JSONArray movieDataArray = null;
         String JSONArray_start = "results";
@@ -67,12 +75,12 @@ final class JSONUtils {
                 try {
                     if (movieItem != null) {
                         // extract the field strings needed
-                        id = movieItem.getString(TMDBHelper.MOVIE_ID);
-                        title = movieItem.getString( TMDBHelper.MOVIE_TITLE );
-                        posterURL = movieItem.getString( TMDBHelper.MOVIE_POSTER );
-                        synopsis = movieItem.getString( TMDBHelper.MOVIE_OVERVIEW );
-                        rating = movieItem.getString( TMDBHelper.MOVIE_VOTES );
-                        release = movieItem.getString( TMDBHelper.MOVIE_RELEASEDATE );
+                        id = movieItem.getString(TMDBInfo.MOVIE_ID);
+                        title = movieItem.getString( TMDBInfo.MOVIE_TITLE );
+                        posterURL = movieItem.getString( TMDBInfo.MOVIE_POSTER );
+                        synopsis = movieItem.getString( TMDBInfo.MOVIE_OVERVIEW );
+                        rating = movieItem.getString( TMDBInfo.MOVIE_VOTES );
+                        release = movieItem.getString( TMDBInfo.MOVIE_RELEASEDATE );
 
                         // add the new movie to the array list
                         movies.add( TMDBHelper.buildMovie( id, title, posterURL, synopsis, rating, release ) );

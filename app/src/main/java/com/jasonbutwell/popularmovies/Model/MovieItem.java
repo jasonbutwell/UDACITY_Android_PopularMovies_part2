@@ -1,4 +1,4 @@
-package com.jasonbutwell.popularmovies;
+package com.jasonbutwell.popularmovies.Model;
 
 /**
  * Created by J on 23/01/2017.

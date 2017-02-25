@@ -1,4 +1,4 @@
-package com.jasonbutwell.popularmovies;
+package com.jasonbutwell.popularmovies.Network;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

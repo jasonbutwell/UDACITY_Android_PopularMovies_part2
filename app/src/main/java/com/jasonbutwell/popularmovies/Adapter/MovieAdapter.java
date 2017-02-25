@@ -1,4 +1,4 @@
-package com.jasonbutwell.popularmovies;
+package com.jasonbutwell.popularmovies.Adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
+import com.jasonbutwell.popularmovies.Model.MovieItem;
+import com.jasonbutwell.popularmovies.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

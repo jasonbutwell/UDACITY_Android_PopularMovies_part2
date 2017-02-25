@@ -8,6 +8,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jasonbutwell.popularmovies.Api.TMDBHelper;
+import com.jasonbutwell.popularmovies.Api.TMDBInfo;
+import com.jasonbutwell.popularmovies.Utils.DateTimeUtils;
+import com.jasonbutwell.popularmovies.Utils.JSONUtils;
+import com.jasonbutwell.popularmovies.Network.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -42,12 +47,12 @@ public class MovieDetails extends AppCompatActivity {
         Intent movieDetailsIntent = getIntent();
 
         // Obtain the data passed with the intent as extras
-        String id = movieDetailsIntent.getStringExtra(TMDBHelper.MOVIE_ID);
-        String movieTitle = movieDetailsIntent.getStringExtra(TMDBHelper.MOVIE_TITLE);
-        String moviePoster = movieDetailsIntent.getStringExtra(TMDBHelper.MOVIE_POSTER);
-        String movieSynopsis = movieDetailsIntent.getStringExtra(TMDBHelper.MOVIE_OVERVIEW);
-        String movieRating = movieDetailsIntent.getStringExtra(TMDBHelper.MOVIE_VOTES);
-        String movieRelease = movieDetailsIntent.getStringExtra(TMDBHelper.MOVIE_RELEASEDATE);
+        String id = movieDetailsIntent.getStringExtra(TMDBInfo.MOVIE_ID);
+        String movieTitle = movieDetailsIntent.getStringExtra(TMDBInfo.MOVIE_TITLE);
+        String moviePoster = movieDetailsIntent.getStringExtra(TMDBInfo.MOVIE_POSTER);
+        String movieSynopsis = movieDetailsIntent.getStringExtra(TMDBInfo.MOVIE_OVERVIEW);
+        String movieRating = movieDetailsIntent.getStringExtra(TMDBInfo.MOVIE_VOTES);
+        String movieRelease = movieDetailsIntent.getStringExtra(TMDBInfo.MOVIE_RELEASEDATE);
 
         // show the movie title
         if ( movieTitle != null )
@@ -74,7 +79,7 @@ public class MovieDetails extends AppCompatActivity {
 
         // show the release date (reformatted)
         if ( movieRelease != null )
-            movieReleaseView.setText(TMDBHelper.USDateToUKDate( movieRelease ));
+            movieReleaseView.setText(DateTimeUtils.USDateToUKDate( movieRelease ));
 
         if ( !NetworkUtils.isNetworkAvailable(getApplicationContext()))
             Toast.makeText(getApplicationContext(), NetworkUtils.ERROR_MESSAGE, Toast.LENGTH_LONG).show();
@@ -117,7 +122,7 @@ public class MovieDetails extends AppCompatActivity {
         @Override
         protected void onPostExecute(String data) {
             // Show the movie duration
-            movieDurationView.setText( TMDBHelper.convertToHoursMins( data ) );
+            movieDurationView.setText( DateTimeUtils.convertToHoursMins( data ) );
         }
     }
 }

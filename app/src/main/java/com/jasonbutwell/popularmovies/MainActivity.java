@@ -13,6 +13,14 @@ import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import com.jasonbutwell.popularmovies.Adapter.MovieAdapter;
+import com.jasonbutwell.popularmovies.Api.APIKey;
+import com.jasonbutwell.popularmovies.Api.TMDBHelper;
+import com.jasonbutwell.popularmovies.Api.TMDBInfo;
+import com.jasonbutwell.popularmovies.Model.MovieItem;
+import com.jasonbutwell.popularmovies.Utils.JSONUtils;
+import com.jasonbutwell.popularmovies.Network.NetworkUtils;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -39,8 +47,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        TMDBHelper.setApiKey( YOUR_API_KEY );
-
         movieAdapter = new MovieAdapter(this, movies);
 
         errorLayout = (FrameLayout) findViewById(R.id.errorMessage);
@@ -65,11 +71,11 @@ public class MainActivity extends AppCompatActivity {
         retryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                loadMovieData(TMDBHelper.POPULAR);
+                loadMovieData(com.jasonbutwell.popularmovies.Api.TMDBInfo.POPULAR);
             }
         });
 
-        loadMovieData(TMDBHelper.POPULAR);
+        loadMovieData(com.jasonbutwell.popularmovies.Api.TMDBInfo.POPULAR);
     }
 
     // Set the loading indicator to be visible or invisible
@@ -102,12 +108,12 @@ public class MainActivity extends AppCompatActivity {
 
         Intent movieDetailsIntent = new Intent( getApplicationContext(), MovieDetails.class );
 
-        movieDetailsIntent.putExtra( TMDBHelper.MOVIE_ID, movies.get(position).getId());
-        movieDetailsIntent.putExtra( TMDBHelper.MOVIE_TITLE, movies.get(position).getOriginalTitle() );
-        movieDetailsIntent.putExtra( TMDBHelper.MOVIE_POSTER, movies.get(position).getPosterURL() );
-        movieDetailsIntent.putExtra( TMDBHelper.MOVIE_OVERVIEW, movies.get(position).getPlotSynopsis() );
-        movieDetailsIntent.putExtra( TMDBHelper.MOVIE_VOTES, movies.get(position).getUserRating() );
-        movieDetailsIntent.putExtra( TMDBHelper.MOVIE_RELEASEDATE, movies.get(position).getReleaseDate() );
+        movieDetailsIntent.putExtra( TMDBInfo.MOVIE_ID, movies.get(position).getId());
+        movieDetailsIntent.putExtra( TMDBInfo.MOVIE_TITLE, movies.get(position).getOriginalTitle() );
+        movieDetailsIntent.putExtra( TMDBInfo.MOVIE_POSTER, movies.get(position).getPosterURL() );
+        movieDetailsIntent.putExtra( TMDBInfo.MOVIE_OVERVIEW, movies.get(position).getPlotSynopsis() );
+        movieDetailsIntent.putExtra( TMDBInfo.MOVIE_VOTES, movies.get(position).getUserRating() );
+        movieDetailsIntent.putExtra( TMDBInfo.MOVIE_RELEASEDATE, movies.get(position).getReleaseDate() );
 
         startActivity(movieDetailsIntent);
     }
@@ -168,11 +174,11 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId() ) {
 
             case R.id.sortby_popular :
-                loadMovieData(TMDBHelper.POPULAR);
+                loadMovieData(TMDBInfo.POPULAR);
                 return true;
 
             case R.id.sortby_top_rated :
-                loadMovieData(TMDBHelper.TOP_RATED);
+                loadMovieData(TMDBInfo.TOP_RATED);
                 return true;
 
             default:
