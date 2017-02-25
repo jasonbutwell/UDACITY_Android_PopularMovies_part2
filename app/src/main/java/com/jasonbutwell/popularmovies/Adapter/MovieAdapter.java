@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
+import com.jasonbutwell.popularmovies.Api.PicassoHelper;
 import com.jasonbutwell.popularmovies.Model.MovieItem;
 import com.jasonbutwell.popularmovies.R;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -23,12 +23,12 @@ public class MovieAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<MovieItem> movies;
 
-    public MovieAdapter( Context context, ArrayList<MovieItem> movies ) {
+    public MovieAdapter(Context context, ArrayList<MovieItem> movies) {
         this.context = context;
         this.movies = movies;
     }
 
-    public void setData( ArrayList<MovieItem> movies ) {
+    public void setData(ArrayList<MovieItem> movies) {
         this.movies = movies;
         notifyDataSetChanged();
     }
@@ -55,22 +55,17 @@ public class MovieAdapter extends BaseAdapter {
         View view = null;
 
         //  Commented out code recycles the view
-        if ( convertView == null) {
+        if (convertView == null) {
             view = LayoutInflater.from(context).inflate(R.layout.listview_item_image, parent, false);
         } else {
             view = (View) convertView;
         }
 
-        if ( movies.get(position).getPosterURL() != null ) {
-            // Handle the caching of the image with the Picasso library
-            Picasso
-                    .with(context)
-                    .load( movies.get( position ).getPosterURL() )
-                    .placeholder(R.drawable.clapboard)
-                    .fit()
-                    .into((ImageView)view);
-        }
+        // Handle the caching of the image with the Picasso library
 
-        return view;
+        if (movies.get(position).getPosterURL() != null)
+            PicassoHelper.loadImage( context, movies.get(position).getPosterURL(), (ImageView)view );
+
+            return view;
     }
 }

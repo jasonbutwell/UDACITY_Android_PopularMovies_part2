@@ -7,13 +7,13 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.jasonbutwell.popularmovies.Api.PicassoHelper;
 import com.jasonbutwell.popularmovies.Api.TMDBHelper;
 import com.jasonbutwell.popularmovies.Api.TMDBInfo;
 import com.jasonbutwell.popularmovies.Network.NetworkUtils;
 import com.jasonbutwell.popularmovies.Utils.DateTimeUtils;
 import com.jasonbutwell.popularmovies.Utils.JSONUtils;
 import com.jasonbutwell.popularmovies.databinding.ActivityMovieDetailsBinding;
-import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.net.URL;
@@ -55,14 +55,8 @@ public class MovieDetails extends AppCompatActivity {
         if ( title != null )
             movieDetailsBinding.movieTitle.setText(title);  // set the movie title
 
-        if ( posterURL != null ) {
-            Picasso
-                    .with(getApplicationContext())
-                    .load( posterURL )
-                    .placeholder(R.drawable.clapboard)
-                    .fit()
-                    .into(movieDetailsBinding.moviePoster); // set the image thumbnail for the movie
-        }
+        // Load image into ImageView with Picasso helper
+        PicassoHelper.loadImage( getApplicationContext(), posterURL, movieDetailsBinding.moviePoster );
 
         if ( overview != null )
             movieDetailsBinding.movieDescription.setText(overview);    // set the synopsis
