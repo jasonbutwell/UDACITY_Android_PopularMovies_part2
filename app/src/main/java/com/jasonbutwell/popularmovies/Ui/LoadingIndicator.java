@@ -32,8 +32,8 @@ public class LoadingIndicator {
                     layoutBinding.errorTextView.setText(errorMessage);
                 else
                     layoutBinding.errorTextView.setText("");
-            } else
-                layoutBinding.errorMessage.setVisibility(View.INVISIBLE);
-        }
+            }
+        } else
+            layoutBinding.errorMessage.setVisibility(View.INVISIBLE);
     }
 }

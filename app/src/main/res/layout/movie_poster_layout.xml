@@ -31,7 +31,6 @@
             android:textStyle="bold"
             android:text="@string/loading"
             android:layout_gravity="center" />
-
     </FrameLayout>
 
     <FrameLayout
@@ -44,7 +43,6 @@
 
         <TextView
             android:id="@+id/errorTextView"
-            android:text=""
             android:textSize="15sp"
             android:textColor="#eeeeee"
             android:layout_width="wrap_content"
@@ -54,11 +52,11 @@
         <Button
             android:id="@+id/retryButton"
             android:text="@string/retry"
+            android:onClick="onErrorReload"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:padding="10dp" />
-
     </FrameLayout>
 
 </FrameLayout>

@@ -52,3 +52,4 @@ public class TMDBQueryDetailsTask extends AsyncTask<URL, Void, String> {
         completed_listener.onTaskComplete(data);
     }
 }
+

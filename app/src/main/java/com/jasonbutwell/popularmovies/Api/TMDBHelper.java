@@ -1,9 +1,14 @@
 package com.jasonbutwell.popularmovies.Api;
 
+import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 
+import com.jasonbutwell.popularmovies.BackgroundTask.TMDBQueryTask;
+import com.jasonbutwell.popularmovies.Listener.MovieTaskCompleteListener;
 import com.jasonbutwell.popularmovies.Model.MovieItem;
+import com.jasonbutwell.popularmovies.Network.NetworkUtils;
+import com.jasonbutwell.popularmovies.Ui.LoadingIndicator;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -36,6 +41,24 @@ import static com.jasonbutwell.popularmovies.Api.TMDBInfo.queryFilters;
         movie.setReleaseDate( release );
 
         return movie;
+    }
+
+    // Load initial movie info for posters
+    public static void loadMovieData(Context context, MovieTaskCompleteListener listener, int sortByParam ) {
+
+        // Check if we have a network connection
+        if ( !NetworkUtils.isNetworkAvailable(context)) {
+            LoadingIndicator.showError(true, NetworkUtils.ERROR_MESSAGE);   // if no network connection,
+                                                                            // show the error message and retry button
+        }
+        else {
+            LoadingIndicator.showError(false, "");                          // clear and hide the error message
+            TMDBHelper.setSortByText( sortByParam );                        // set to sort by selected parameter
+
+            new TMDBQueryTask(listener).execute( TMDBHelper.buildBaseURL() );   // create new query to download
+                                                                                // and extract the JSON data
+            //resetGridViewPosition(); // reset the gridView
+        }
     }
 
     public static URL buildDetailURL( String id ) {
