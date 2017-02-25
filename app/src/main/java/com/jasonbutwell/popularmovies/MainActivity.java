@@ -207,7 +207,7 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
 //        // Create new Toast message and display it
 //        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
 
-        MovieDetail.launchIntent( getApplicationContext(), movies.get(clickedItemIndex) );
+        MovieDetail.launchMovieDetailIntent( getApplicationContext(), movies.get(clickedItemIndex) );
     }
 
     // We use this to grab the JSON for the movies we want to see

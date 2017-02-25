@@ -5,7 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.jasonbutwell.popularmovies.Api.PicassoHelper;
+import com.jasonbutwell.popularmovies.Api.PicassoImageHelper;
 import com.jasonbutwell.popularmovies.Listener.ListItemClickListener;
 import com.jasonbutwell.popularmovies.Model.MovieItem;
 import com.jasonbutwell.popularmovies.R;
@@ -35,7 +35,7 @@ public class MoviePosterViewHolder extends RecyclerView.ViewHolder implements Vi
 
     public void bind(Context context, MovieItem movieItem) {
 
-        PicassoHelper.loadImage( context, movieItem.getPosterURL(), imageView);
+        PicassoImageHelper.loadImage( context, movieItem.getPosterURL(), imageView);
     }
 
     // Our internal click handler that signifies what item was actually clicked

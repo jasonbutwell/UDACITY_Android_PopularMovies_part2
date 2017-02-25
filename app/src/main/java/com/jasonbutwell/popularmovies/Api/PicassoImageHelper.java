@@ -12,7 +12,7 @@ import com.squareup.picasso.Picasso;
 
 // Picasso helper class to load an image URL into an ImageView
 
-public class PicassoHelper {
+public class PicassoImageHelper {
 
     public static void loadImage(Context context, String imageURL, ImageView destination) {
 

@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
-import com.jasonbutwell.popularmovies.Api.PicassoHelper;
+import com.jasonbutwell.popularmovies.Api.PicassoImageHelper;
 import com.jasonbutwell.popularmovies.Model.MovieItem;
 import com.jasonbutwell.popularmovies.R;
 
@@ -64,7 +64,7 @@ public class MovieAdapter extends BaseAdapter {
         // Handle the caching of the image with the Picasso library
 
         if (movies.get(position).getPosterURL() != null)
-            PicassoHelper.loadImage( context, movies.get(position).getPosterURL(), (ImageView)view );
+            PicassoImageHelper.loadImage( context, movies.get(position).getPosterURL(), (ImageView)view );
 
             return view;
     }
