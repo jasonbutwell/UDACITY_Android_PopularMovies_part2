@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import com.jasonbutwell.popularmovies.Api.TMDBInfo;
 import com.jasonbutwell.popularmovies.Listener.MovieDetailTaskCompleteListener;
 import com.jasonbutwell.popularmovies.Network.NetworkUtils;
+import com.jasonbutwell.popularmovies.Ui.LoadingIndicator;
 import com.jasonbutwell.popularmovies.Utils.JSONUtils;
 
 import java.io.IOException;
@@ -25,6 +26,11 @@ public class TMDBQueryDetailsTask extends AsyncTask<URL, Void, String> {
 
     public TMDBQueryDetailsTask(MovieDetailTaskCompleteListener listener) {
         completed_listener = listener;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        LoadingIndicator.show( true );
     }
 
     @Override
@@ -50,6 +56,7 @@ public class TMDBQueryDetailsTask extends AsyncTask<URL, Void, String> {
     @Override
     protected void onPostExecute(String data) {
         completed_listener.onTaskComplete(data);
+        LoadingIndicator.show( false );
     }
 }
 
