@@ -14,7 +14,6 @@
 
     <TextView
         android:id="@+id/movieTitle"
-        android:text=""
         android:textSize="22sp"
         android:padding="10dp"
         android:textColor="#eeeeee"
@@ -77,10 +76,8 @@
 
         <TextView
             android:id="@+id/movieDescription"
-            android:text=""
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-
     </ScrollView>
 
 </RelativeLayout>

@@ -22,8 +22,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements ListItemClickListener, MovieTaskCompleteListener {
 
-    // IMPORTANT!
-    // Replace API KEY in Api / APIKey.java with your own 'TMDB API KEY'
+    // IMPORTANT! - Replace API KEY in 'Api / APIKey.java' with your own 'TMDB API KEY'
 
     // Enable binding so we can access UI view components easier
     MoviePosterLayoutBinding binding;
@@ -45,38 +44,18 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
         mAdapter = new MovieRecyclerViewAdapter(this, movies, this);
         binding.moviePosterView.setAdapter(mAdapter);
 
-        // Load popular as default initially - To be replaced by sharedPreference later
+        // Load popular as default initially - (To be replaced by sharedPreferences)
         loadMovies(TMDBInfo.POPULAR);
     }
 
-    // Reset position of GridView
-    public void resetGridViewPosition() {
-        // Scroll to first item in grid
-        binding.moviePosterView.getLayoutManager().smoothScrollToPosition(binding.moviePosterView,null,0);
-    }
-
-    // update the movie list arraylist and then the adapter
-    private void updateMovies(ArrayList<MovieItem> arrayList) {
-        // Clear & rebuild the movie item array list
-        movies.clear();
-        movies.addAll(arrayList);
-
-        // reset the data set for the adapter
-        mAdapter.setData(movies);
-    }
-    
-    // Create our options menu so we can filter the movies by
-    // 1. Popular, 2. Top rated
-
+    // Create our options menu so we can filter movies by (1.Popular, 2.Top rated)
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.sort_by_menu, menu);
         return true;
     }
 
-    // Detect what filter was requested and set that filter
-    // to be used for the http get request
-
+    // Detect what filter was requested & set it. (used for http get request)
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -95,9 +74,11 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
         }
     }
 
+    // Loads movies by sort order
     private void loadMovies( int sortByParam ) {
         TMDBHelper.loadMovieData(getApplicationContext(), this, sortByParam );
-        resetGridViewPosition();
+        // Reset position of GridView
+        binding.moviePosterView.getLayoutManager().smoothScrollToPosition(binding.moviePosterView,null,0);
     }
 
     // When a movie poster in the RecyclerView is clicked on
@@ -109,7 +90,9 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
     // Callback for when the asyncTask completes
     @Override
     public void onTaskComplete(ArrayList<MovieItem> moviesData) {
-        updateMovies(moviesData);
+        movies.clear();                 // update the movie list arraylist and then the adapter
+        movies.addAll(moviesData);
+        mAdapter.setData(movies);       // reset the data set for the adapter
     }
 
     // Do not touch this as it's called from the XML layout

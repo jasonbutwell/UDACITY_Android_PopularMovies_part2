@@ -18,7 +18,7 @@ public class LoadingIndicator {
 
     public static void show( boolean show ) {
         if ( layoutBinding != null )
-            layoutBinding.loadingIndicator.setVisibility( (show ? View.VISIBLE : View.INVISIBLE) );
+            layoutBinding.loadingLayout.loadingIndicator.setVisibility( (show ? View.VISIBLE : View.INVISIBLE) );
     }
 
     // Set the load error message and show it or hide it
@@ -26,14 +26,14 @@ public class LoadingIndicator {
 
         if (show) {
             if (layoutBinding != null) {
-                layoutBinding.errorMessage.setVisibility(View.VISIBLE);
+                layoutBinding.loadingLayout.errorMessage.setVisibility(View.VISIBLE);
 
                 if (errorMessage != null && !errorMessage.equals(""))
-                    layoutBinding.errorTextView.setText(errorMessage);
+                    layoutBinding.loadingLayout.errorTextView.setText(errorMessage);
                 else
-                    layoutBinding.errorTextView.setText("");
+                    layoutBinding.loadingLayout.errorTextView.setText("");
             }
         } else
-            layoutBinding.errorMessage.setVisibility(View.INVISIBLE);
+            layoutBinding.loadingLayout.errorMessage.setVisibility(View.INVISIBLE);
     }
 }

@@ -59,7 +59,5 @@ public class TMDBQueryTask extends AsyncTask< URL, Void, ArrayList<MovieItem> > 
 
         // Loading indicator invisible
         LoadingIndicator.show( false );
-
-        //updateMovies(arrayList);
     }
 }
