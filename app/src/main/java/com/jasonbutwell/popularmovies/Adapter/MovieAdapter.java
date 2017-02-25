@@ -55,17 +55,18 @@ public class MovieAdapter extends BaseAdapter {
         View view = null;
 
         //  Commented out code recycles the view
-//        if ( convertView == null) {
+        if ( convertView == null) {
             view = LayoutInflater.from(context).inflate(R.layout.listview_item_image, parent, false);
-//        } else {
-//            view = (View) convertView;
-//        }
+        } else {
+            view = (View) convertView;
+        }
 
         if ( movies.get(position).getPosterURL() != null ) {
             // Handle the caching of the image with the Picasso library
             Picasso
                     .with(context)
                     .load( movies.get( position ).getPosterURL() )
+                    .placeholder(R.drawable.clapboard)
                     .fit()
                     .into((ImageView)view);
         }
