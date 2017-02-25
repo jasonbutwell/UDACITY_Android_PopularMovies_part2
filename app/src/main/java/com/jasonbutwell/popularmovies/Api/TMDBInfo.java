@@ -5,6 +5,8 @@ package com.jasonbutwell.popularmovies.Api;
 
 public class TMDBInfo {
 
+    public static final int NO_OF_POSTERS_PER_ROW = 2;  // For the Recycler layout manager
+
     // string literals to facilitate easier extracting of fields from the JSON data
     public static final String MOVIE_ID = "id";
     public static final String MOVIE_TITLE = "original_title";

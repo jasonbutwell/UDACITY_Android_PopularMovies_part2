@@ -1,17 +1,14 @@
 package com.jasonbutwell.popularmovies;
 
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.TextView;
 
 import com.jasonbutwell.popularmovies.Adapter.MovieRecyclerViewAdapter;
-import com.jasonbutwell.popularmovies.Api.APIKey;
 import com.jasonbutwell.popularmovies.Api.TMDBHelper;
 import com.jasonbutwell.popularmovies.Api.TMDBInfo;
 import com.jasonbutwell.popularmovies.BackgroundTask.TMDBQueryTask;
@@ -19,23 +16,26 @@ import com.jasonbutwell.popularmovies.Listener.ListItemClickListener;
 import com.jasonbutwell.popularmovies.Listener.MovieTaskCompleteListener;
 import com.jasonbutwell.popularmovies.Model.MovieItem;
 import com.jasonbutwell.popularmovies.Network.NetworkUtils;
+import com.jasonbutwell.popularmovies.Ui.LoadingIndicator;
 import com.jasonbutwell.popularmovies.Ui.MovieDetail;
+import com.jasonbutwell.popularmovies.databinding.MoviePosterLayoutBinding;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements ListItemClickListener, MovieTaskCompleteListener {
 
     // IMPORTANT!
-    // Replace API KEY here or in APIKey.java with your own 'TMDB API KEY'
+    // Replace API KEY in Api / APIKey.java with your own 'TMDB API KEY'
 
-    private final String YOUR_API_KEY = APIKey.get();
+    // Enable binding so we can access UI view components easier
+    MoviePosterLayoutBinding binding;
 
     private MovieRecyclerViewAdapter mAdapter;
     private RecyclerView mList;
 
-    private FrameLayout loadingIndicator;
-    private FrameLayout errorLayout;
-    private TextView errorMessageTV;
+//    private FrameLayout loadingIndicator;
+//    private FrameLayout errorLayout;
+//    private TextView errorMessageTV;
 
     // This is where we will store our movies
     private ArrayList<MovieItem> movies = new ArrayList<>();
@@ -43,10 +43,12 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.movie_poster_layout);
+        binding = DataBindingUtil.setContentView(this, R.layout.movie_poster_layout);
+
+        LoadingIndicator.setBinding(binding);
 
         mList = (RecyclerView) findViewById(R.id.moviePosterView);
-        mList.setLayoutManager(new GridLayoutManager(this,2));
+        mList.setLayoutManager(new GridLayoutManager(this,TMDBInfo.NO_OF_POSTERS_PER_ROW));
         mList.setHasFixedSize(true);
 
         mAdapter = new MovieRecyclerViewAdapter(this, movies, this);
@@ -57,8 +59,7 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
 //        errorLayout = (FrameLayout) findViewById(R.id.errorMessage);
 //        errorMessageTV = (TextView) findViewById(R.id.errorTextView);
 //        Button retryButton = (Button) findViewById(R.id.retryButton);
-//        loadingIndicator = (FrameLayout)findViewById(R.id.loadingIndicator);
-
+        
 //        // Retry button listener
 //        retryButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -74,27 +75,20 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
     // Set the loading indicator to be visible or invisible
     // Shows and hides a frame layout with 2 child views
 
-    private void showLoadingIndicator( boolean show ) {
-//        if ( show )
-//            loadingIndicator.setVisibility(View.VISIBLE);
-//        else
-//            loadingIndicator.setVisibility(View.INVISIBLE);
-    }
-
     // Set the error message and show it or hide it
-    private void showErrorMessage( boolean show, String errorMessage ) {
-
-        if ( show ) {
-            errorLayout.setVisibility(View.VISIBLE);
-
-            if ( errorMessage != null && !errorMessage.equals("") )
-                errorMessageTV.setText(errorMessage);
-            else
-                errorMessageTV.setText("");
-        }
-        else
-            errorLayout.setVisibility(View.INVISIBLE);
-    }
+//    private void showErrorMessage( boolean show, String errorMessage ) {
+//
+//        if ( show ) {
+//            errorLayout.setVisibility(View.VISIBLE);
+//
+//            if ( errorMessage != null && !errorMessage.equals("") )
+//                errorMessageTV.setText(errorMessage);
+//            else
+//                errorMessageTV.setText("");
+//        }
+//        else
+//            errorLayout.setVisibility(View.INVISIBLE);
+//    }
 
     // Reset position of GridView
     public void resetGridViewPosition() {
@@ -114,6 +108,8 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
 
     // Check if we have a network connection
     private void loadMovieData( int sortByParam ) {
+
+        //LoadingIndicator.show(true);
 
         if ( !NetworkUtils.isNetworkAvailable(getApplicationContext())) {
             // if no network connection, show the error message and retry button
@@ -163,10 +159,14 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
         }
     }
 
+    // When a movie poster in the RecyclerView is clicked on
+
     @Override
     public void onListItemClick(int clickedItemIndex) {
         MovieDetail.launchIntent( getApplicationContext(), movies.get(clickedItemIndex) );
     }
+
+    // Callback for when the asyncTask completes
 
     @Override
     public void onTaskComplete(ArrayList<MovieItem> moviesData) {

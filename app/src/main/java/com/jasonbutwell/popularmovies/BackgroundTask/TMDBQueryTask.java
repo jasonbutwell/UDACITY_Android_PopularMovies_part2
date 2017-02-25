@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import com.jasonbutwell.popularmovies.Listener.MovieTaskCompleteListener;
 import com.jasonbutwell.popularmovies.Model.MovieItem;
 import com.jasonbutwell.popularmovies.Network.NetworkUtils;
+import com.jasonbutwell.popularmovies.Ui.LoadingIndicator;
 import com.jasonbutwell.popularmovies.Utils.JSONUtils;
 
 import java.io.IOException;
@@ -20,11 +21,8 @@ import java.util.ArrayList;
 
 public class TMDBQueryTask extends AsyncTask< URL, Void, ArrayList<MovieItem> > {
 
-    URL UrlToSearch = null;
-    String searchResults = null;
-    ArrayList<MovieItem> arrayList = null;
-
-    MovieTaskCompleteListener listener;
+    private String searchResults = null;
+    private MovieTaskCompleteListener listener;
 
     public TMDBQueryTask(MovieTaskCompleteListener listener) {
         this.listener = listener;
@@ -33,12 +31,13 @@ public class TMDBQueryTask extends AsyncTask< URL, Void, ArrayList<MovieItem> > 
     @Override
     protected void onPreExecute() {
         // Loading Indicator visible
-        //showLoadingIndicator( true );
+        LoadingIndicator.show( true );
     }
 
     @Override
     protected ArrayList<MovieItem> doInBackground( URL... urls ) {
 
+        ArrayList<MovieItem> arrayList = null;
         URL searchURL = null;
         searchURL = urls[0];
 
@@ -59,7 +58,8 @@ public class TMDBQueryTask extends AsyncTask< URL, Void, ArrayList<MovieItem> > 
         listener.onTaskComplete(arrayList);
 
         // Loading indicator invisible
-        //showLoadingIndicator( false );
+        LoadingIndicator.show( false );
+
         //updateMovies(arrayList);
     }
 }

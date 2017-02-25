@@ -19,9 +19,7 @@ import java.net.URL;
 
 public class TMDBQueryDetailsTask extends AsyncTask<URL, Void, String> {
 
-    private URL UrlToSearch = null;
     private String searchResults = null;
-    private String data = null;
 
     private MovieDetailTaskCompleteListener completed_listener;
 
@@ -31,6 +29,8 @@ public class TMDBQueryDetailsTask extends AsyncTask<URL, Void, String> {
 
     @Override
     protected String doInBackground(URL... urls) {
+
+        String data = null;
 
         URL searchURL = null;
         searchURL = urls[0];
@@ -46,7 +46,7 @@ public class TMDBQueryDetailsTask extends AsyncTask<URL, Void, String> {
 
         return data;
     }
-    
+
     @Override
     protected void onPostExecute(String data) {
         completed_listener.onTaskComplete(data);
