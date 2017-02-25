@@ -2,6 +2,7 @@ package com.jasonbutwell.popularmovies.BackgroundTask;
 
 import android.os.AsyncTask;
 
+import com.jasonbutwell.popularmovies.Api.TMDBInfo;
 import com.jasonbutwell.popularmovies.Listener.MovieDetailTaskCompleteListener;
 import com.jasonbutwell.popularmovies.Network.NetworkUtils;
 import com.jasonbutwell.popularmovies.Utils.JSONUtils;
@@ -41,11 +42,11 @@ public class TMDBQueryDetailsTask extends AsyncTask<URL, Void, String> {
             e.printStackTrace();
         }
 
-        data = JSONUtils.extractJSONString( searchResults, "runtime" );
+        data = JSONUtils.extractJSONString( searchResults, TMDBInfo.MOVIE_RUNTIME );
 
         return data;
     }
-
+    
     @Override
     protected void onPostExecute(String data) {
         completed_listener.onTaskComplete(data);

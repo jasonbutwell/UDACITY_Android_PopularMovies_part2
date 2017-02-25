@@ -52,16 +52,14 @@ public class MovieDetail {
     // Updates the UI with movie Item details
     public static String setUI(Context context, MovieItem movieItem, ActivityMovieDetailsBinding binding) {
 
-        String rating = movieItem.getUserRatingOutOfTen();
-
         // Load image into ImageView with Picasso helper
         PicassoImageHelper.loadImage( context, movieItem.getPosterURL(), binding.moviePoster );
 
         binding.movieTitle.setText(movieItem.getOriginalTitle());                                       // set the movie title
         binding.movieDescription.setText(movieItem.getPlotSynopsis());                                  // set the synopsis
-        binding.movieRating.setText(rating);                                                            // show the rating
+        binding.movieRating.setText(movieItem.getUserRatingOutOfTen());                                 // show the rating
         binding.movieReleaseDate.setText( DateTimeUtils.USDateToUKDate(movieItem.getReleaseDate()) );   // show the release date (reformatted)
 
-        return movieItem.getId();
+        return movieItem.getId();   // Get the id so we can set the run time field
     }
 }
