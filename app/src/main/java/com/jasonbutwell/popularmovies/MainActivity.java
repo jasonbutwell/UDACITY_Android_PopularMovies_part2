@@ -4,36 +4,40 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.jasonbutwell.popularmovies.Adapter.MovieAdapter;
+import com.jasonbutwell.popularmovies.Adapter.CustomRecyclerViewAdapter;
+import com.jasonbutwell.popularmovies.Adapter.ListItemClickListener;
 import com.jasonbutwell.popularmovies.Api.APIKey;
 import com.jasonbutwell.popularmovies.Api.TMDBHelper;
 import com.jasonbutwell.popularmovies.Api.TMDBInfo;
 import com.jasonbutwell.popularmovies.Model.MovieItem;
-import com.jasonbutwell.popularmovies.Utils.JSONUtils;
 import com.jasonbutwell.popularmovies.Network.NetworkUtils;
+import com.jasonbutwell.popularmovies.Utils.JSONUtils;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ListItemClickListener {
 
     // IMPORTANT!
     // Replace API KEY here or in APIKey.java with your own 'TMDB API KEY'
 
     private final String YOUR_API_KEY = APIKey.get();
 
-    private GridView gridView;
-    private MovieAdapter movieAdapter;
+    private CustomRecyclerViewAdapter mAdapter;
+    private RecyclerView mList;
+
+    //private GridView gridView;
+    //private MovieAdapter movieAdapter;
     private FrameLayout loadingIndicator;
 
     private FrameLayout errorLayout;
@@ -45,47 +49,53 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.movie_poster_layout);
 
-        movieAdapter = new MovieAdapter(this, movies);
+        mList = (RecyclerView) findViewById(R.id.moviePosterView);
+        mList.setLayoutManager(new GridLayoutManager(this,2));
+        mList.setHasFixedSize(true);
 
-        errorLayout = (FrameLayout) findViewById(R.id.errorMessage);
-        errorMessageTV = (TextView) findViewById(R.id.errorTextView);
+        mAdapter = new CustomRecyclerViewAdapter(this, movies, this);
+        mList.setAdapter(mAdapter);
+        //movieAdapter = new MovieAdapter(this, movies);
 
-        Button retryButton = (Button) findViewById(R.id.retryButton);
+//        errorLayout = (FrameLayout) findViewById(R.id.errorMessage);
+//        errorMessageTV = (TextView) findViewById(R.id.errorTextView);
+//        Button retryButton = (Button) findViewById(R.id.retryButton);
 
-        gridView = (GridView) findViewById(R.id.gridView);
-        loadingIndicator = (FrameLayout)findViewById(R.id.loadingIndicator);
+//        gridView = (GridView) findViewById(R.id.gridView);
 
-        gridView.setAdapter(movieAdapter);
+//        loadingIndicator = (FrameLayout)findViewById(R.id.loadingIndicator);
 
-        // Click Listener for the gridView
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                showMovieDetails( position );
-            }
-        });
+//        gridView.setAdapter(movieAdapter);
+//
+//        // Click Listener for the gridView
+//        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+//                showMovieDetails( position );
+//            }
+//        });
+//
+//        // Retry button listener
+//        retryButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                loadMovieData(TMDBInfo.POPULAR);
+//            }
+//        });
 
-        // Retry button listener
-        retryButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                loadMovieData(com.jasonbutwell.popularmovies.Api.TMDBInfo.POPULAR);
-            }
-        });
-
-        loadMovieData(com.jasonbutwell.popularmovies.Api.TMDBInfo.POPULAR);
+        loadMovieData(TMDBInfo.POPULAR);
     }
 
     // Set the loading indicator to be visible or invisible
     // Shows and hides a frame layout with 2 child views
 
     private void showLoadingIndicator( boolean show ) {
-        if ( show )
-            loadingIndicator.setVisibility(View.VISIBLE);
-        else
-            loadingIndicator.setVisibility(View.INVISIBLE);
+//        if ( show )
+//            loadingIndicator.setVisibility(View.VISIBLE);
+//        else
+//            loadingIndicator.setVisibility(View.INVISIBLE);
     }
 
     // Set the error message and show it or hide it
@@ -121,7 +131,9 @@ public class MainActivity extends AppCompatActivity {
     // Reset position of GridView
     public void resetGridViewPosition() {
         // Scroll to first item in grid
-        gridView.smoothScrollToPosition(0);
+//        gridView.smoothScrollToPosition(0);
+        
+        mList.getLayoutManager().smoothScrollToPosition(mList,null,0);
     }
 
     // update the movie list arraylist and then the adapter
@@ -131,7 +143,8 @@ public class MainActivity extends AppCompatActivity {
         movies.addAll(arrayList);
 
         // reset the data set for the adapter
-        movieAdapter.setData(movies);
+        mAdapter.setData(movies);
+//        movieAdapter.setData(movies);
     }
 
     // Check if we have a network connection
@@ -139,11 +152,11 @@ public class MainActivity extends AppCompatActivity {
 
         if ( !NetworkUtils.isNetworkAvailable(getApplicationContext())) {
             // if no network connection, show the error message and retry button
-            showErrorMessage(true, NetworkUtils.ERROR_MESSAGE);
+            //showErrorMessage(true, NetworkUtils.ERROR_MESSAGE);
         }
         else {
             // clear and hide the error message
-            showErrorMessage(false, "");
+            //showErrorMessage(false, "");
 
             // set to sort by selected parameter
             TMDBHelper.setSortByText( sortByParam );
@@ -186,6 +199,18 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // This is where we would call the Movie details Intent here! :)
+
+    @Override
+    public void onListItemClick(int clickedItemIndex) {
+        // Just display a toast message with the index of the item clicked on for now.
+        String message = "You clicked on item #" + String.valueOf(clickedItemIndex);
+
+        // Create new Toast message and display it
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+
+    }
+
     // We use this to grab the JSON for the movies we want to see
     // We then break up the results and store them in an arraylist of custom type MovieItem
 
@@ -222,7 +247,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute( ArrayList<MovieItem> arrayList ) {
             // Loading indicator invisible
-            showLoadingIndicator( false );
+            //showLoadingIndicator( false );
             updateMovies(arrayList);
         }
     }
