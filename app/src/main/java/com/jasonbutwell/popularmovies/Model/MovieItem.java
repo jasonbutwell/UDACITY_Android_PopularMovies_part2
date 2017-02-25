@@ -14,8 +14,7 @@ public class MovieItem {
     private String releaseDate;
     private String posterURL;
 
-    public MovieItem() {
-    }
+    public MovieItem() {}
 
     public MovieItem(String id, String originalTitle, String plotSynopsis, String userRating, String releaseDate, String posterURL) {
         this.id = id;
