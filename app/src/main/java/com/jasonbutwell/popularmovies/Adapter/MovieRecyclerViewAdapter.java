@@ -7,13 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.jasonbutwell.popularmovies.Listener.ListItemClickListener;
-import com.jasonbutwell.popularmovies.MainActivity;
 import com.jasonbutwell.popularmovies.Model.MovieItem;
 import com.jasonbutwell.popularmovies.R;
 
 import java.util.ArrayList;
 
-public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<MoviePosterViewHolder> {
+public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MoviePosterViewHolder> {
 
     // Class variable to store the data to show
     private ArrayList<MovieItem> movies;
@@ -29,7 +28,7 @@ public class CustomRecyclerViewAdapter extends RecyclerView.Adapter<MoviePosterV
     }
 
     // Recycler constructor, stores the data and the list item click listener to use
-    public CustomRecyclerViewAdapter(Context context, ArrayList<MovieItem> dataItems, ListItemClickListener listener) {
+    public MovieRecyclerViewAdapter(Context context, ArrayList<MovieItem> dataItems, ListItemClickListener listener) {
         this.context = context;
         this.movies = dataItems;
         mOnClickListener = listener;

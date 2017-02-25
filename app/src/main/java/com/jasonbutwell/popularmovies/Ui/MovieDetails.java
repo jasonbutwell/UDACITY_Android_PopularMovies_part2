@@ -8,13 +8,13 @@ import android.widget.Toast;
 
 import com.jasonbutwell.popularmovies.Api.TMDBHelper;
 import com.jasonbutwell.popularmovies.BackgroundTask.TMDBQueryDetailsTask;
-import com.jasonbutwell.popularmovies.Listener.AsyncCallBackListener;
+import com.jasonbutwell.popularmovies.Listener.MovieDetailTaskCompleteListener;
 import com.jasonbutwell.popularmovies.Network.NetworkUtils;
 import com.jasonbutwell.popularmovies.R;
 import com.jasonbutwell.popularmovies.Utils.DateTimeUtils;
 import com.jasonbutwell.popularmovies.databinding.ActivityMovieDetailsBinding;
 
-public class MovieDetails extends AppCompatActivity implements AsyncCallBackListener {
+public class MovieDetails extends AppCompatActivity implements MovieDetailTaskCompleteListener {
 
     // Use data binding to reduce boilerplate code
     public ActivityMovieDetailsBinding movieDetailsBinding;
@@ -30,12 +30,13 @@ public class MovieDetails extends AppCompatActivity implements AsyncCallBackList
         Intent movieDetailsIntent = getIntent();
 
         // Update the UI with the details obtained
-        String movieId = MovieDetail.setMovieDetails( getApplicationContext(),MovieDetail.generateMovie(movieDetailsIntent), movieDetailsBinding );
+        String movieId = MovieDetail.setMovieDetails( getApplicationContext(), MovieDetail.generateMovie(movieDetailsIntent), movieDetailsBinding );
 
         if ( !NetworkUtils.isNetworkAvailable(getApplicationContext()))
             Toast.makeText(getApplicationContext(), NetworkUtils.ERROR_MESSAGE, Toast.LENGTH_LONG).show();
         else
             // Call a new task to obtain the run duration from the movies JSON using it's id
+            // (this) means pass the listener instance
             new TMDBQueryDetailsTask(this).execute( TMDBHelper.buildDetailURL(movieId) );
     }
 

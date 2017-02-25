@@ -2,7 +2,7 @@ package com.jasonbutwell.popularmovies.BackgroundTask;
 
 import android.os.AsyncTask;
 
-import com.jasonbutwell.popularmovies.Listener.AsyncCallBackListener;
+import com.jasonbutwell.popularmovies.Listener.MovieDetailTaskCompleteListener;
 import com.jasonbutwell.popularmovies.Network.NetworkUtils;
 import com.jasonbutwell.popularmovies.Utils.JSONUtils;
 
@@ -22,9 +22,9 @@ public class TMDBQueryDetailsTask extends AsyncTask<URL, Void, String> {
     private String searchResults = null;
     private String data = null;
 
-    private AsyncCallBackListener completed_listener;
+    private MovieDetailTaskCompleteListener completed_listener;
 
-    public TMDBQueryDetailsTask(AsyncCallBackListener listener) {
+    public TMDBQueryDetailsTask(MovieDetailTaskCompleteListener listener) {
         completed_listener = listener;
     }
 

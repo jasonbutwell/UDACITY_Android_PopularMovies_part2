@@ -1,7 +1,5 @@
 package com.jasonbutwell.popularmovies;
 
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -12,29 +10,27 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.jasonbutwell.popularmovies.Adapter.CustomRecyclerViewAdapter;
+import com.jasonbutwell.popularmovies.Adapter.MovieRecyclerViewAdapter;
 import com.jasonbutwell.popularmovies.Api.APIKey;
 import com.jasonbutwell.popularmovies.Api.TMDBHelper;
 import com.jasonbutwell.popularmovies.Api.TMDBInfo;
+import com.jasonbutwell.popularmovies.BackgroundTask.TMDBQueryTask;
 import com.jasonbutwell.popularmovies.Listener.ListItemClickListener;
+import com.jasonbutwell.popularmovies.Listener.MovieTaskCompleteListener;
 import com.jasonbutwell.popularmovies.Model.MovieItem;
 import com.jasonbutwell.popularmovies.Network.NetworkUtils;
 import com.jasonbutwell.popularmovies.Ui.MovieDetail;
-import com.jasonbutwell.popularmovies.Ui.MovieDetails;
-import com.jasonbutwell.popularmovies.Utils.JSONUtils;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements ListItemClickListener {
+public class MainActivity extends AppCompatActivity implements ListItemClickListener, MovieTaskCompleteListener {
 
     // IMPORTANT!
     // Replace API KEY here or in APIKey.java with your own 'TMDB API KEY'
 
     private final String YOUR_API_KEY = APIKey.get();
 
-    private CustomRecyclerViewAdapter mAdapter;
+    private MovieRecyclerViewAdapter mAdapter;
     private RecyclerView mList;
 
     private FrameLayout loadingIndicator;
@@ -53,28 +49,14 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
         mList.setLayoutManager(new GridLayoutManager(this,2));
         mList.setHasFixedSize(true);
 
-        mAdapter = new CustomRecyclerViewAdapter(this, movies, this);
+        mAdapter = new MovieRecyclerViewAdapter(this, movies, this);
         mList.setAdapter(mAdapter);
-        //movieAdapter = new MovieAdapter(this, movies);
 
 //        errorLayout = (FrameLayout) findViewById(R.id.errorMessage);
 //        errorMessageTV = (TextView) findViewById(R.id.errorTextView);
 //        Button retryButton = (Button) findViewById(R.id.retryButton);
-
-//        gridView = (GridView) findViewById(R.id.gridView);
-
 //        loadingIndicator = (FrameLayout)findViewById(R.id.loadingIndicator);
 
-//        gridView.setAdapter(movieAdapter);
-//
-//        // Click Listener for the gridView
-//        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-//                showMovieDetails( position );
-//            }
-//        });
-//
 //        // Retry button listener
 //        retryButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -111,26 +93,9 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
             errorLayout.setVisibility(View.INVISIBLE);
     }
 
-    // Pass the selected movie's details to the intent to show that information to the user.
-    private void showMovieDetails( int position ) {
-
-        Intent movieDetailsIntent = new Intent( getApplicationContext(), MovieDetails.class );
-
-        movieDetailsIntent.putExtra( TMDBInfo.MOVIE_ID, movies.get(position).getId());
-        movieDetailsIntent.putExtra( TMDBInfo.MOVIE_TITLE, movies.get(position).getOriginalTitle() );
-        movieDetailsIntent.putExtra( TMDBInfo.MOVIE_POSTER, movies.get(position).getPosterURL() );
-        movieDetailsIntent.putExtra( TMDBInfo.MOVIE_OVERVIEW, movies.get(position).getPlotSynopsis() );
-        movieDetailsIntent.putExtra( TMDBInfo.MOVIE_VOTES, movies.get(position).getUserRating() );
-        movieDetailsIntent.putExtra( TMDBInfo.MOVIE_RELEASEDATE, movies.get(position).getReleaseDate() );
-
-        startActivity(movieDetailsIntent);
-    }
-
     // Reset position of GridView
     public void resetGridViewPosition() {
         // Scroll to first item in grid
-//        gridView.smoothScrollToPosition(0);
-
         mList.getLayoutManager().smoothScrollToPosition(mList,null,0);
     }
 
@@ -142,7 +107,6 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
 
         // reset the data set for the adapter
         mAdapter.setData(movies);
-//        movieAdapter.setData(movies);
     }
 
     // Check if we have a network connection
@@ -160,10 +124,9 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
             TMDBHelper.setSortByText( sortByParam );
 
             // create new query to download and extract the JSON data
-            new TMDBQueryTask().execute( TMDBHelper.buildBaseURL());
+            new TMDBQueryTask(this).execute( TMDBHelper.buildBaseURL() );
 
-            // reset the gridView
-            resetGridViewPosition();
+            resetGridViewPosition(); // reset the gridView
         }
     }
 
@@ -201,53 +164,11 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
 
     @Override
     public void onListItemClick(int clickedItemIndex) {
-        // Just display a toast message with the index of the item clicked on for now.
-//        String message = "You clicked on item #" + String.valueOf(clickedItemIndex);
-//
-//        // Create new Toast message and display it
-//        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-
         MovieDetail.launchMovieDetailIntent( getApplicationContext(), movies.get(clickedItemIndex) );
     }
 
-    // We use this to grab the JSON for the movies we want to see
-    // We then break up the results and store them in an arraylist of custom type MovieItem
-
-    public class TMDBQueryTask extends AsyncTask< URL, Void, ArrayList<MovieItem> > {
-
-        URL UrlToSearch = null;
-        String searchResults = null;
-        ArrayList<MovieItem> arrayList = null;
-
-        @Override
-        protected void onPreExecute() {
-            // Loading Indicator visible
-            showLoadingIndicator( true );
-        }
-
-        @Override
-        protected ArrayList<MovieItem> doInBackground( URL... urls ) {
-
-            URL searchURL = null;
-            searchURL = urls[0];
-
-            try {
-                searchResults = NetworkUtils.getResponseFromHttpUrl( searchURL );
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            arrayList = JSONUtils.extractJSONArray( searchResults );
-
-            return arrayList;
-        }
-
-        @Override
-        protected void onPostExecute( ArrayList<MovieItem> arrayList ) {
-            // Loading indicator invisible
-            //showLoadingIndicator( false );
-            updateMovies(arrayList);
-        }
+    @Override
+    public void onTaskComplete(ArrayList<MovieItem> moviesData) {
+        updateMovies(moviesData);
     }
 }
