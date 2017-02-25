@@ -30,7 +30,7 @@ public class MovieDetails extends AppCompatActivity implements MovieDetailTaskCo
         Intent movieDetailsIntent = getIntent();
 
         // Update the UI with the details obtained
-        String movieId = MovieDetail.setMovieDetails( getApplicationContext(), MovieDetail.generateMovie(movieDetailsIntent), movieDetailsBinding );
+        String movieId = MovieDetail.setUI( getApplicationContext(), MovieDetail.generateFromIntent(movieDetailsIntent), movieDetailsBinding );
 
         if ( !NetworkUtils.isNetworkAvailable(getApplicationContext()))
             Toast.makeText(getApplicationContext(), NetworkUtils.ERROR_MESSAGE, Toast.LENGTH_LONG).show();

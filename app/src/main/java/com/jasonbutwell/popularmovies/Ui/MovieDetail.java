@@ -16,7 +16,7 @@ import com.jasonbutwell.popularmovies.databinding.ActivityMovieDetailsBinding;
 public class MovieDetail {
 
     // Pass the selected movie's details to the intent to show that information to the user.
-    public static void launchMovieDetailIntent(Context context, MovieItem movieItem) {
+    public static void launchIntent(Context context, MovieItem movieItem) {
 
         Intent movieDetailsIntent = new Intent( context, MovieDetails.class );
         movieDetailsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -32,7 +32,7 @@ public class MovieDetail {
     }
 
     // Generate a MovieItem object based on information pulled from the Intent
-    public static MovieItem generateMovie(Intent movieIntent) {
+    public static MovieItem generateFromIntent(Intent movieIntent) {
 
         String id="", movieTitle="", moviePoster="", movieOverview="", movieRating="", movieRelease="";
 
@@ -50,9 +50,9 @@ public class MovieDetail {
     }
 
     // Updates the UI with movie Item details
-    public static String setMovieDetails(Context context, MovieItem movieItem, ActivityMovieDetailsBinding binding) {
+    public static String setUI(Context context, MovieItem movieItem, ActivityMovieDetailsBinding binding) {
 
-        String rating = movieItem.getUserRating() + " / 10";
+        String rating = movieItem.getUserRatingOutOfTen();
 
         // Load image into ImageView with Picasso helper
         PicassoImageHelper.loadImage( context, movieItem.getPosterURL(), binding.moviePoster );
@@ -64,5 +64,4 @@ public class MovieDetail {
 
         return movieItem.getId();
     }
-
 }

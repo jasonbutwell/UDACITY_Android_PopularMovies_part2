@@ -14,6 +14,8 @@ public class MovieItem {
     private String releaseDate;
     private String posterURL;
 
+    private static final String ratingOutOfTen = " / 10";
+
     public MovieItem() {}
 
     public MovieItem(String id, String originalTitle, String plotSynopsis, String userRating, String releaseDate, String posterURL) {
@@ -55,6 +57,10 @@ public class MovieItem {
 
     public String getUserRating() {
         return userRating;
+    }
+
+    public String getUserRatingOutOfTen() {
+        return userRating.concat(ratingOutOfTen);
     }
 
     public void setUserRating(String userRating) {

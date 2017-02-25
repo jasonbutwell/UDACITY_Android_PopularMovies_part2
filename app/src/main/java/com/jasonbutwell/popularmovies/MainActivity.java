@@ -52,6 +52,8 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
         mAdapter = new MovieRecyclerViewAdapter(this, movies, this);
         mList.setAdapter(mAdapter);
 
+//        TODO: Need to re-implement loading indicator components once views are back in layout
+
 //        errorLayout = (FrameLayout) findViewById(R.id.errorMessage);
 //        errorMessageTV = (TextView) findViewById(R.id.errorTextView);
 //        Button retryButton = (Button) findViewById(R.id.retryButton);
@@ -65,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
 //            }
 //        });
 
+        // Load popular as default initially - To be replaced by sharedPreference later
         loadMovieData(TMDBInfo.POPULAR);
     }
 
@@ -160,11 +163,9 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
         }
     }
 
-    // This is where we would call the Movie details Intent here! :)
-
     @Override
     public void onListItemClick(int clickedItemIndex) {
-        MovieDetail.launchMovieDetailIntent( getApplicationContext(), movies.get(clickedItemIndex) );
+        MovieDetail.launchIntent( getApplicationContext(), movies.get(clickedItemIndex) );
     }
 
     @Override
