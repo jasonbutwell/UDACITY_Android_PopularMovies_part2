@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.jasonbutwell.popularmovies.Api.PicassoHelper;
+import com.jasonbutwell.popularmovies.Listener.ListItemClickListener;
 import com.jasonbutwell.popularmovies.Model.MovieItem;
 import com.jasonbutwell.popularmovies.R;
 

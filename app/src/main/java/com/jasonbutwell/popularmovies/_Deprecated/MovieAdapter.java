@@ -1,4 +1,4 @@
-package com.jasonbutwell.popularmovies.Adapter;
+package com.jasonbutwell.popularmovies._Deprecated;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

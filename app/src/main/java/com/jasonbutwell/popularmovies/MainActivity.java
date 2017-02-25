@@ -11,15 +11,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.jasonbutwell.popularmovies.Adapter.CustomRecyclerViewAdapter;
-import com.jasonbutwell.popularmovies.Adapter.ListItemClickListener;
 import com.jasonbutwell.popularmovies.Api.APIKey;
 import com.jasonbutwell.popularmovies.Api.TMDBHelper;
 import com.jasonbutwell.popularmovies.Api.TMDBInfo;
+import com.jasonbutwell.popularmovies.Listener.ListItemClickListener;
 import com.jasonbutwell.popularmovies.Model.MovieItem;
 import com.jasonbutwell.popularmovies.Network.NetworkUtils;
+import com.jasonbutwell.popularmovies.Ui.MovieDetail;
+import com.jasonbutwell.popularmovies.Ui.MovieDetails;
 import com.jasonbutwell.popularmovies.Utils.JSONUtils;
 
 import java.io.IOException;
@@ -36,10 +37,7 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
     private CustomRecyclerViewAdapter mAdapter;
     private RecyclerView mList;
 
-    //private GridView gridView;
-    //private MovieAdapter movieAdapter;
     private FrameLayout loadingIndicator;
-
     private FrameLayout errorLayout;
     private TextView errorMessageTV;
 
@@ -132,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
     public void resetGridViewPosition() {
         // Scroll to first item in grid
 //        gridView.smoothScrollToPosition(0);
-        
+
         mList.getLayoutManager().smoothScrollToPosition(mList,null,0);
     }
 
@@ -204,11 +202,12 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
     @Override
     public void onListItemClick(int clickedItemIndex) {
         // Just display a toast message with the index of the item clicked on for now.
-        String message = "You clicked on item #" + String.valueOf(clickedItemIndex);
+//        String message = "You clicked on item #" + String.valueOf(clickedItemIndex);
+//
+//        // Create new Toast message and display it
+//        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
 
-        // Create new Toast message and display it
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-
+        MovieDetail.launchIntent( getApplicationContext(), movies.get(clickedItemIndex) );
     }
 
     // We use this to grab the JSON for the movies we want to see

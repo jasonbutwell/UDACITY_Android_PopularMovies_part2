@@ -1,4 +1,4 @@
-package com.jasonbutwell.popularmovies.Adapter;
+package com.jasonbutwell.popularmovies.Listener;
 
 /**
  * Created by J on 25/02/2017.

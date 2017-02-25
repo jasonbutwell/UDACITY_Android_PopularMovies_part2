@@ -14,8 +14,24 @@ public class MovieItem {
     private String releaseDate;
     private String posterURL;
 
+    public MovieItem() {
+    }
+
+    public MovieItem(String id, String originalTitle, String plotSynopsis, String userRating, String releaseDate, String posterURL) {
+        this.id = id;
+        this.originalTitle = originalTitle;
+        this.plotSynopsis = plotSynopsis;
+        this.userRating = userRating;
+        this.releaseDate = releaseDate;
+        this.posterURL = posterURL;
+    }
+
     public String getId() {
         return id;
+    }
+
+    public int getIntId() {
+        return Integer.parseInt(id);
     }
 
     public void setId(String id) {

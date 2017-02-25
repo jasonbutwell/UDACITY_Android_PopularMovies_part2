@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.jasonbutwell.popularmovies.Listener.ListItemClickListener;
+import com.jasonbutwell.popularmovies.MainActivity;
 import com.jasonbutwell.popularmovies.Model.MovieItem;
 import com.jasonbutwell.popularmovies.R;
 
