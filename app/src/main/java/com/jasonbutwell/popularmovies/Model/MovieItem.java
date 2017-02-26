@@ -6,13 +6,11 @@ package com.jasonbutwell.popularmovies.Model;
 
 // Will be used to store specific information on each movie
 
-public class MovieItem {
-    private String id;
-    private String originalTitle;
+public class MovieItem extends MovieItemBasic {
+
     private String plotSynopsis;
     private String userRating;
     private String releaseDate;
-    private String posterURL;
 
     private static final String ratingOutOfTen = " / 10";
 
@@ -25,26 +23,6 @@ public class MovieItem {
         this.userRating = userRating;
         this.releaseDate = releaseDate;
         this.posterURL = posterURL;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public int getIntId() {
-        return Integer.parseInt(id);
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getOriginalTitle() {
-        return originalTitle;
-    }
-
-    public void setOriginalTitle(String originalTitle) {
-        this.originalTitle = originalTitle;
     }
 
     public String getPlotSynopsis() {
@@ -73,13 +51,5 @@ public class MovieItem {
 
     public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
-    }
-
-    public String getPosterURL() {
-        return posterURL;
-    }
-
-    public void setPosterURL(String posterURL) {
-        this.posterURL = posterURL;
     }
 }

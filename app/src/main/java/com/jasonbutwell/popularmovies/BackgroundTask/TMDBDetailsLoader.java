@@ -8,7 +8,6 @@ import android.support.v4.content.Loader;
 
 import com.jasonbutwell.popularmovies.Api.TMDBHelper;
 import com.jasonbutwell.popularmovies.Api.TMDBInfo;
-import com.jasonbutwell.popularmovies.Listener.MovieDetailTaskCompleteListener;
 import com.jasonbutwell.popularmovies.Network.NetworkUtils;
 import com.jasonbutwell.popularmovies.Ui.LoadingIndicator;
 import com.jasonbutwell.popularmovies.Utils.DateTimeUtils;
@@ -24,30 +23,30 @@ import java.net.URL;
 
 public class TMDBDetailsLoader implements LoaderManager.LoaderCallbacks<String> {
 
-    private static int LOADER_ID = 1;
-    private static String LOADER_ID_STRING = "json";
+    private static final int LOADER_ID = 1;
 
     private Context mContext;
-    private LoaderManager mLoaderManager;
     private ActivityMovieDetailsBinding mBinding;
 
-    private MovieDetailTaskCompleteListener listener;
+    //private LoaderManager mLoaderManager;
+    //private MovieDetailTaskCompleteListener listener;
+    //private static String LOADER_ID_STRING = "json";
 
     private String mMovieId;
 
     public TMDBDetailsLoader(Context context, LoaderManager loaderManager, ActivityMovieDetailsBinding binding, String movieId) {
         mContext = context;
-        mLoaderManager = loaderManager;
         mBinding = binding;
         mMovieId = movieId;
+        //mLoaderManager = loaderManager;
 
 //        Bundle queryBundle = new Bundle();
 //        queryBundle.putString(LOADER_ID_STRING, TMDBHelper.buildDetailURL(mMovieId).toString());
 
-        if (mLoaderManager == null)
-            mLoaderManager.initLoader(LOADER_ID, null, this);   // null parameter can be queryBundle
+        if (loaderManager == null)
+            loaderManager.initLoader(LOADER_ID, null, this);   // null parameter can be queryBundle
         else
-            mLoaderManager.restartLoader(LOADER_ID, null, this);
+            loaderManager.restartLoader(LOADER_ID, null, this);
     }
 
     @Override
