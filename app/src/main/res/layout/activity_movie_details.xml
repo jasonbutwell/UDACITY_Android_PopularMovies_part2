@@ -80,8 +80,9 @@
             android:layout_height="wrap_content" />
     </ScrollView>
 
-    <include layout="@layout/loading_layout"
-        android:id="@+id/loadingLayout" />
+    <include
+        android:id="@+id/loadingLayout"
+        layout="@layout/loading_layout" />
 
 </RelativeLayout>
 </layout>

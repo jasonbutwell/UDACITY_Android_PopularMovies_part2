@@ -14,7 +14,6 @@ import com.jasonbutwell.popularmovies.Api.TMDBInfo;
 import com.jasonbutwell.popularmovies.Listener.ListItemClickListener;
 import com.jasonbutwell.popularmovies.Listener.MovieTaskCompleteListener;
 import com.jasonbutwell.popularmovies.Model.MovieItem;
-import com.jasonbutwell.popularmovies.Ui.LoadingIndicator;
 import com.jasonbutwell.popularmovies.Ui.MovieDetail;
 import com.jasonbutwell.popularmovies.databinding.MoviePosterLayoutBinding;
 
@@ -36,7 +35,6 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
         super.onCreate(savedInstanceState);
 
         binding = DataBindingUtil.setContentView(this, R.layout.movie_poster_layout);
-        LoadingIndicator.setBinding(binding);
 
         binding.moviePosterView.setLayoutManager(new GridLayoutManager(this,TMDBInfo.NO_OF_POSTERS_PER_ROW));
         binding.moviePosterView.setHasFixedSize(true);
@@ -76,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
 
     // Loads movies by sort order
     private void loadMovies( int sortByParam ) {
-        TMDBHelper.loadMovieData(getApplicationContext(), this, sortByParam );
+        TMDBHelper.loadMovieData(getApplicationContext(), this, sortByParam, binding );
         // Reset position of GridView
         binding.moviePosterView.getLayoutManager().smoothScrollToPosition(binding.moviePosterView,null,0);
     }

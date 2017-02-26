@@ -35,7 +35,7 @@ public final class NetworkUtils {
             scanner.useDelimiter("\\A");
 
             return (scanner.hasNext()? scanner.next() : null);
-            
+
         } finally {
             urlConnection.disconnect();
         }

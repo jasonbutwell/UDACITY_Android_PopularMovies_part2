@@ -23,14 +23,16 @@ public class TMDBQueryTask extends AsyncTask< URL, Void, ArrayList<MovieItem> > 
 
     private String searchResults = null;
     private MovieTaskCompleteListener listener;
+    Object binding;
 
-    public TMDBQueryTask(MovieTaskCompleteListener listener) {
+    public TMDBQueryTask(MovieTaskCompleteListener listener, Object binding) {
         this.listener = listener;
+        this.binding = binding;
     }
 
     @Override
     protected void onPreExecute() {
-        LoadingIndicator.show( true );  // Loading Indicator visible
+        LoadingIndicator.show( binding, true );  // Loading Indicator visible
     }
 
     @Override
@@ -56,6 +58,6 @@ public class TMDBQueryTask extends AsyncTask< URL, Void, ArrayList<MovieItem> > 
     protected void onPostExecute( ArrayList<MovieItem> arrayList ) {
         listener.onTaskComplete(arrayList);
 
-        LoadingIndicator.show( false ); // Loading indicator invisible
+        LoadingIndicator.show( binding, false ); // Loading indicator invisible
     }
 }
