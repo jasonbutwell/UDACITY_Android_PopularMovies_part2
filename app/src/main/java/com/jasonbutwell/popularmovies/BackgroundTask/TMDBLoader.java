@@ -7,14 +7,11 @@ import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 
 import com.jasonbutwell.popularmovies.Api.TMDBHelper;
-import com.jasonbutwell.popularmovies.Model.MovieItem;
+import com.jasonbutwell.popularmovies.Api.TMDBInfo;
 import com.jasonbutwell.popularmovies.Network.NetworkUtils;
 import com.jasonbutwell.popularmovies.Ui.LoadingIndicator;
-import com.jasonbutwell.popularmovies.Ui.MovieDetail;
 import com.jasonbutwell.popularmovies.Utils.JSONUtils;
-import com.jasonbutwell.popularmovies.databinding.ActivityMovieDetailsBinding;
-
-import org.json.JSONException;
+import com.jasonbutwell.popularmovies.databinding.MoviePosterLayoutBinding;
 
 import java.io.IOException;
 import java.net.URL;
@@ -23,29 +20,23 @@ import java.net.URL;
  * Created by J on 26/02/2017.
  */
 
-public class TMDBDetailsLoader implements LoaderManager.LoaderCallbacks<MovieItem> {
+public class TMDBLoader implements LoaderManager.LoaderCallbacks<String> {
 
-    private static final int LOADER_ID = 1;
+    private static final int LOADER_ID = 2;
 
     private Context mContext;
-    private ActivityMovieDetailsBinding mBinding;
+    private MoviePosterLayoutBinding mBinding;
 
     //private LoaderManager mLoaderManager;
     //private MovieDetailTaskCompleteListener listener;
     //private static String LOADER_ID_STRING = "json";
 
-    //private String mMovieId;
+    private String mMovieId;
 
-    private String mId, mPosterURL;
-
-    public TMDBDetailsLoader(Context context, LoaderManager loaderManager, ActivityMovieDetailsBinding binding, String id, String posterURL) {
+    public TMDBLoader(Context context, LoaderManager loaderManager, MoviePosterLayoutBinding binding, String movieId) {
         mContext = context;
         mBinding = binding;
-
-        mId = id;
-        mPosterURL = posterURL;
-
-        //mMovieId = movieId;
+        mMovieId = movieId;
         //mLoaderManager = loaderManager;
 
 //        Bundle queryBundle = new Bundle();
@@ -59,11 +50,12 @@ public class TMDBDetailsLoader implements LoaderManager.LoaderCallbacks<MovieIte
 
     @Override
     public Loader onCreateLoader(int id, final Bundle args) {
-        return new AsyncTaskLoader<MovieItem>(mContext) {
+        return new AsyncTaskLoader<String>(mContext) {
 
             @Override
             protected void onStartLoading() {
                 super.onStartLoading();
+
                 //if (args == null) return;
 
                 LoadingIndicator.show(mBinding, true);
@@ -71,37 +63,26 @@ public class TMDBDetailsLoader implements LoaderManager.LoaderCallbacks<MovieIte
             }
 
             @Override
-            public MovieItem loadInBackground() {
-                String queryString = TMDBHelper.buildDetailURL(mId).toString();
-                String jsonData="";
-                MovieItem movie = null;
+            public String loadInBackground() {
+                String queryString = TMDBHelper.buildDetailURL(mMovieId).toString();
 
                 if (queryString == null) return null;
 
                 try {
-                    jsonData = NetworkUtils.getResponseFromHttpUrl(new URL(queryString));
+                    // Do the work here and pass back result
+                    return JSONUtils.extractJSONString( NetworkUtils.getResponseFromHttpUrl(new URL(queryString)), TMDBInfo.MOVIE_RUNTIME );
+
                 } catch (IOException e) {
                     e.printStackTrace();
+                    return null;
                 }
-
-                try {
-                    movie = JSONUtils.extractJSONArray( jsonData, "");
-                    movie.setPosterURL(mPosterURL);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                return movie;
             }
         };
     }
 
-    // update the UI with the full movie details
-
     @Override
-    public void onLoadFinished(Loader<MovieItem> loader, MovieItem movie) {
-        MovieDetail.setUI( mContext, movie, mBinding );
+    public void onLoadFinished(Loader<String> loader, String data) {
+        //mBinding.movieDuration.setText( DateTimeUtils.convertToHoursMins( data ) );              // Show the movie duration
         LoadingIndicator.show(mBinding, false);
     }
 

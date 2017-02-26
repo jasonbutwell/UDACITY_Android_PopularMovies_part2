@@ -3,7 +3,7 @@ package com.jasonbutwell.popularmovies.BackgroundTask;
 import android.os.AsyncTask;
 
 import com.jasonbutwell.popularmovies.Listener.MovieTaskCompleteListener;
-import com.jasonbutwell.popularmovies.Model.MovieItem;
+import com.jasonbutwell.popularmovies.Model.MovieItemBasic;
 import com.jasonbutwell.popularmovies.Network.NetworkUtils;
 import com.jasonbutwell.popularmovies.Ui.LoadingIndicator;
 import com.jasonbutwell.popularmovies.Utils.JSONUtils;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 // We use this to grab the JSON for the movies we want to see
 // We then break up the results and store them in an arraylist of custom type MovieItem
 
-public class TMDBQueryTask extends AsyncTask< URL, Void, ArrayList<MovieItem> > {
+public class TMDBQueryTask extends AsyncTask< URL, Void, ArrayList<MovieItemBasic> > {
 
     private String searchResults = null;
     private MovieTaskCompleteListener listener;
@@ -36,9 +36,9 @@ public class TMDBQueryTask extends AsyncTask< URL, Void, ArrayList<MovieItem> > 
     }
 
     @Override
-    protected ArrayList<MovieItem> doInBackground( URL... urls ) {
+    protected ArrayList<MovieItemBasic> doInBackground(URL... urls ) {
 
-        ArrayList<MovieItem> arrayList = null;
+        ArrayList<MovieItemBasic> arrayList = null;
         URL searchURL = null;
         searchURL = urls[0];
 
@@ -55,7 +55,7 @@ public class TMDBQueryTask extends AsyncTask< URL, Void, ArrayList<MovieItem> > 
     }
 
     @Override
-    protected void onPostExecute( ArrayList<MovieItem> arrayList ) {
+    protected void onPostExecute( ArrayList<MovieItemBasic> arrayList ) {
         listener.onTaskComplete(arrayList);
 
         LoadingIndicator.show( binding, false ); // Loading indicator invisible

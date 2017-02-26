@@ -6,6 +6,7 @@ import android.net.Uri;
 import com.jasonbutwell.popularmovies.BackgroundTask.TMDBQueryTask;
 import com.jasonbutwell.popularmovies.Listener.MovieTaskCompleteListener;
 import com.jasonbutwell.popularmovies.Model.MovieItem;
+import com.jasonbutwell.popularmovies.Model.MovieItemBasic;
 import com.jasonbutwell.popularmovies.Network.NetworkUtils;
 import com.jasonbutwell.popularmovies.R;
 import com.jasonbutwell.popularmovies.Ui.LoadingIndicator;
@@ -38,6 +39,16 @@ import static com.jasonbutwell.popularmovies.Api.TMDBInfo.queryFilters;
         movie.setPlotSynopsis( synopsis );
         movie.setUserRating( rating );
         movie.setReleaseDate( release );
+
+        return movie;
+    }
+
+    // Builds a basic movie obj
+    public static MovieItemBasic buildMovie(String id, String title, String posterURL ) {
+        MovieItem movie = new MovieItem();
+        movie.setId(id);
+        movie.setOriginalTitle( title );
+        movie.setPosterURL( TMDBHelper.buildImageURL( posterURL ));
 
         return movie;
     }

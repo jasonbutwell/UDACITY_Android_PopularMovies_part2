@@ -7,7 +7,7 @@ import android.widget.ImageView;
 
 import com.jasonbutwell.popularmovies.Api.PicassoImageHelper;
 import com.jasonbutwell.popularmovies.Listener.ListItemClickListener;
-import com.jasonbutwell.popularmovies.Model.MovieItem;
+import com.jasonbutwell.popularmovies.Model.MovieItemBasic;
 import com.jasonbutwell.popularmovies.R;
 
 /**
@@ -33,7 +33,7 @@ public class MoviePosterViewHolder extends RecyclerView.ViewHolder implements Vi
         itemView.setOnClickListener(this);
     }
 
-    public void bind(Context context, MovieItem movieItem) {
+    public void bind(Context context, MovieItemBasic movieItem) {
 
         PicassoImageHelper.loadImage( context, movieItem.getPosterURL(), posterImageView);
     }

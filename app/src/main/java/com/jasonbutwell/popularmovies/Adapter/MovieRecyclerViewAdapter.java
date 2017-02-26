@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.jasonbutwell.popularmovies.Listener.ListItemClickListener;
-import com.jasonbutwell.popularmovies.Model.MovieItem;
+import com.jasonbutwell.popularmovies.Model.MovieItemBasic;
 import com.jasonbutwell.popularmovies.R;
 
 import java.util.ArrayList;
@@ -15,20 +15,20 @@ import java.util.ArrayList;
 public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MoviePosterViewHolder> {
 
     // Class variable to store the data to show
-    private ArrayList<MovieItem> movies;
+    private ArrayList<MovieItemBasic> movies;
     private Context context;
 
     // Somewhere to store the click list item listener
     private ListItemClickListener mOnClickListener;
 
     // To refresh the data set once it's been changed
-    public void setData(ArrayList<MovieItem> movies) {
+    public void setData(ArrayList<MovieItemBasic> movies) {
         this.movies = movies;
         notifyDataSetChanged();
     }
 
     // Recycler constructor, stores the data and the list item click listener to use
-    public MovieRecyclerViewAdapter(Context context, ArrayList<MovieItem> dataItems, ListItemClickListener listener) {
+    public MovieRecyclerViewAdapter(Context context, ArrayList<MovieItemBasic> dataItems, ListItemClickListener listener) {
         this.context = context;
         this.movies = dataItems;
         mOnClickListener = listener;

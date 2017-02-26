@@ -1,5 +1,7 @@
 package com.jasonbutwell.popularmovies.Model;
 
+import java.util.ArrayList;
+
 /**
  * Created by J on 23/01/2017.
  */
@@ -11,6 +13,10 @@ public class MovieItem extends MovieItemBasic {
     private String plotSynopsis;
     private String userRating;
     private String releaseDate;
+    private String runTime;
+
+    private ArrayList<TrailerItem> trailers;
+    private ArrayList<ReviewItem> reviews;
 
     private static final String ratingOutOfTen = " / 10";
 
@@ -51,5 +57,13 @@ public class MovieItem extends MovieItemBasic {
 
     public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
+    }
+
+    public String getRunTime() {
+        return runTime;
+    }
+
+    public void setRunTime(String runTime) {
+        this.runTime = runTime;
     }
 }

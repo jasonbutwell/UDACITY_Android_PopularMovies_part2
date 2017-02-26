@@ -13,7 +13,7 @@ import com.jasonbutwell.popularmovies.Api.TMDBHelper;
 import com.jasonbutwell.popularmovies.Api.TMDBInfo;
 import com.jasonbutwell.popularmovies.Listener.ListItemClickListener;
 import com.jasonbutwell.popularmovies.Listener.MovieTaskCompleteListener;
-import com.jasonbutwell.popularmovies.Model.MovieItem;
+import com.jasonbutwell.popularmovies.Model.MovieItemBasic;
 import com.jasonbutwell.popularmovies.Ui.MovieDetail;
 import com.jasonbutwell.popularmovies.databinding.MoviePosterLayoutBinding;
 
@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
     private MovieRecyclerViewAdapter mAdapter;
 
     // This is where we will store our movies
-    private ArrayList<MovieItem> movies = new ArrayList<>();
+    private ArrayList<MovieItemBasic> movies = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
 
     // Callback for when the asyncTask completes
     @Override
-    public void onTaskComplete(ArrayList<MovieItem> moviesData) {
+    public void onTaskComplete(ArrayList<MovieItemBasic> moviesData) {
         movies.clear();                 // update the movie list arraylist and then the adapter
         movies.addAll(moviesData);
         mAdapter.setData(movies);       // reset the data set for the adapter

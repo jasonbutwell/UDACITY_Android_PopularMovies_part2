@@ -3,6 +3,7 @@ package com.jasonbutwell.popularmovies.Utils;
 import com.jasonbutwell.popularmovies.Api.TMDBHelper;
 import com.jasonbutwell.popularmovies.Api.TMDBInfo;
 import com.jasonbutwell.popularmovies.Model.MovieItem;
+import com.jasonbutwell.popularmovies.Model.MovieItemBasic;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 
 public class JSONUtils {
 
-    private static ArrayList<MovieItem> movies = new ArrayList<>();
+    private static ArrayList<MovieItemBasic> movies = new ArrayList<>();
 
     private JSONUtils() {}
 
@@ -38,14 +39,40 @@ public class JSONUtils {
         return new JSONObject( JSONData);
     }
 
-    public static ArrayList<MovieItem> extractJSONArray(String JSONData)  {
+    public static String extractJSONObjectString( JSONObject json, String extractString ) throws JSONException {
+        String extracted = json.getString(extractString);
+        return extracted;
+    }
+
+    public static MovieItem extractJSONArray(String JSONData, String n) throws JSONException {
+        JSONObject movieData = null;
+        MovieItem movieItem = new MovieItem();
+
+        try {
+            movieData = new JSONObject( JSONData );
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        // Set the movie Item info - minus the poster as that's not available here
+        movieItem.setId(extractJSONObjectString( movieData, TMDBInfo.MOVIE_ID ));
+        movieItem.setOriginalTitle(extractJSONObjectString( movieData, TMDBInfo.MOVIE_TITLE ));
+        movieItem.setPlotSynopsis(extractJSONObjectString( movieData, TMDBInfo.MOVIE_OVERVIEW ));
+        movieItem.setUserRating(extractJSONObjectString( movieData, TMDBInfo.MOVIE_VOTES ));
+        movieItem.setReleaseDate(extractJSONObjectString( movieData, TMDBInfo.MOVIE_RELEASEDATE ));
+        movieItem.setRunTime(extractJSONObjectString( movieData, TMDBInfo.MOVIE_RUNTIME));
+
+        return movieItem;   // return the movie we created
+    }
+
+    public static ArrayList<MovieItemBasic> extractJSONArray(String JSONData)  {
 
         JSONArray movieDataArray = null;
         String JSONArray_start = "results";
 
         JSONObject movieData = null;
 
-        movies.clear();
+        movies.clear(); // clear arraylist
 
         try {
             movieData = new JSONObject( JSONData );
@@ -70,7 +97,7 @@ public class JSONUtils {
                     e.printStackTrace();
                 }
 
-                String id = null, title = null, posterURL = null, synopsis = null, rating = null, release = null;
+                String id = "", title = "", posterURL = "";
 
                 try {
                     if (movieItem != null) {
@@ -78,20 +105,9 @@ public class JSONUtils {
                         id = movieItem.getString(TMDBInfo.MOVIE_ID);
                         title = movieItem.getString( TMDBInfo.MOVIE_TITLE );
                         posterURL = movieItem.getString( TMDBInfo.MOVIE_POSTER );
-                        synopsis = movieItem.getString( TMDBInfo.MOVIE_OVERVIEW );
-                        rating = movieItem.getString( TMDBInfo.MOVIE_VOTES );
-                        release = movieItem.getString( TMDBInfo.MOVIE_RELEASEDATE );
 
                         // add the new movie to the array list
-                        movies.add( TMDBHelper.buildMovie( id, title, posterURL, synopsis, rating, release ) );
-
-                        // DEBUG OUTPUT
-//                        Log.i("MOVIE id:",id);
-//                        Log.i("MOVIE title:",title);
-//                        Log.i("MOVIE poster:",posterURL);
-//                        Log.i("MOVIE plot:",synopsis);
-//                        Log.i("MOVIE rating:",rating);
-//                        Log.i("MOVIE release:",release);
+                        movies.add( TMDBHelper.buildMovie( id, title, posterURL ) );
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

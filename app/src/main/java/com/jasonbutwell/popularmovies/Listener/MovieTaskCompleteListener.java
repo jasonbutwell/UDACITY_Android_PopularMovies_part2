@@ -1,6 +1,6 @@
 package com.jasonbutwell.popularmovies.Listener;
 
-import com.jasonbutwell.popularmovies.Model.MovieItem;
+import com.jasonbutwell.popularmovies.Model.MovieItemBasic;
 
 import java.util.ArrayList;
 
@@ -9,5 +9,5 @@ import java.util.ArrayList;
  */
 
 public interface MovieTaskCompleteListener {
-    void onTaskComplete(ArrayList<MovieItem> movies);           // The method we must implement
+    void onTaskComplete(ArrayList<MovieItemBasic> movies);           // The method we must implement
 }
