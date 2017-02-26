@@ -33,13 +33,13 @@ public class MovieDetails extends AppCompatActivity implements MovieDetailTaskCo
         String movieId = MovieDetail.setUI( getApplicationContext(), MovieDetail.generateFromIntent(movieDetailsIntent), movieDetailsBinding );
 
         if ( !NetworkUtils.isNetworkAvailable(getApplicationContext()))
-            Toast.makeText(getApplicationContext(), NetworkUtils.ERROR_MESSAGE, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.network_error_message), Toast.LENGTH_LONG).show();
         else
-            // Call a new task to obtain the run duration from the movies JSON using it's id
-            // (this) means pass the listener instance
+            // Call a new task to obtain the run duration from the movies JSON using it's id - (this) means pass the listener instance
             new TMDBQueryDetailsTask(this).execute( TMDBHelper.buildDetailURL(movieId) );
     }
 
+    // This is run when the asyncTask completes
     @Override
     public void onTaskComplete(String text) {
         movieDetailsBinding.movieDuration.setText( DateTimeUtils.convertToHoursMins( text ) );              // Show the movie duration

@@ -18,8 +18,6 @@ import java.util.Scanner;
 
 public final class NetworkUtils {
 
-    public static final String ERROR_MESSAGE = "No connection!";
-
     // Check to see if network connection is available
     public static boolean isNetworkAvailable(Context context) {
         ConnectivityManager connectivityManager
@@ -33,16 +31,11 @@ public final class NetworkUtils {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         try {
             InputStream in = urlConnection.getInputStream();
-
             Scanner scanner = new Scanner(in);
             scanner.useDelimiter("\\A");
 
-            boolean hasInput = scanner.hasNext();
-            if (hasInput) {
-                return scanner.next();
-            } else {
-                return null;
-            }
+            return (scanner.hasNext()? scanner.next() : null);
+            
         } finally {
             urlConnection.disconnect();
         }

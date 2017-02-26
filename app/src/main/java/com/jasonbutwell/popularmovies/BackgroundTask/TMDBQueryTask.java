@@ -30,8 +30,7 @@ public class TMDBQueryTask extends AsyncTask< URL, Void, ArrayList<MovieItem> > 
 
     @Override
     protected void onPreExecute() {
-        // Loading Indicator visible
-        LoadingIndicator.show( true );
+        LoadingIndicator.show( true );  // Loading Indicator visible
     }
 
     @Override
@@ -57,7 +56,6 @@ public class TMDBQueryTask extends AsyncTask< URL, Void, ArrayList<MovieItem> > 
     protected void onPostExecute( ArrayList<MovieItem> arrayList ) {
         listener.onTaskComplete(arrayList);
 
-        // Loading indicator invisible
-        LoadingIndicator.show( false );
+        LoadingIndicator.show( false ); // Loading indicator invisible
     }
 }

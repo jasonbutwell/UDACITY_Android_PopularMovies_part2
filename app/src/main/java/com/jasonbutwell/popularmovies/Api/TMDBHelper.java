@@ -2,12 +2,12 @@ package com.jasonbutwell.popularmovies.Api;
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 
 import com.jasonbutwell.popularmovies.BackgroundTask.TMDBQueryTask;
 import com.jasonbutwell.popularmovies.Listener.MovieTaskCompleteListener;
 import com.jasonbutwell.popularmovies.Model.MovieItem;
 import com.jasonbutwell.popularmovies.Network.NetworkUtils;
+import com.jasonbutwell.popularmovies.R;
 import com.jasonbutwell.popularmovies.Ui.LoadingIndicator;
 
 import java.net.MalformedURLException;
@@ -25,10 +25,9 @@ import static com.jasonbutwell.popularmovies.Api.TMDBInfo.queryFilters;
  */
 
  public class TMDBHelper {
-    private TMDBHelper() {}     // Private constructor
+    private TMDBHelper() {}                 // Private constructor
 
-    // For expansion, for grabbing multiple pages later on
-    private static int page_number = 1;
+    private static int page_number = 1;     // For expansion, for grabbing multiple pages later on
 
     // Builds a movie item and returns it
     public static MovieItem buildMovie(String id, String title, String posterURL, String synopsis, String rating, String release ) {
@@ -46,19 +45,18 @@ import static com.jasonbutwell.popularmovies.Api.TMDBInfo.queryFilters;
     // Load initial movie info for posters
     public static void loadMovieData(Context context, MovieTaskCompleteListener listener, int sortByParam ) {
 
+        String errorMessage = context.getString(R.string.network_error_message);
+
         // Check if we have a network connection
         if ( !NetworkUtils.isNetworkAvailable(context)) {
-            LoadingIndicator.showError(true, NetworkUtils.ERROR_MESSAGE);   // if no network connection,
-                                                                            // show the error message and retry button
-        }
+            LoadingIndicator.showError(true, errorMessage );                    // if no network connection,
+        }                                                                       // show the error message and retry button
         else {
-            LoadingIndicator.showError(false, "");                          // clear and hide the error message
-            TMDBHelper.setSortByText( sortByParam );                        // set to sort by selected parameter
+            LoadingIndicator.showError(false, "");                              // clear and hide the error message
+            TMDBHelper.setSortByText(sortByParam);                              // set to sort by selected parameter
 
-            new TMDBQueryTask(listener).execute( TMDBHelper.buildBaseURL() );   // create new query to download
-                                                                                // and extract the JSON data
-            //resetGridViewPosition(); // reset the gridView
-        }
+            new TMDBQueryTask(listener).execute(TMDBHelper.buildBaseURL());     // create new query to download
+        }                                                                       // and extract the JSON data
     }
 
     public static URL buildDetailURL( String id ) {
@@ -72,8 +70,6 @@ import static com.jasonbutwell.popularmovies.Api.TMDBInfo.queryFilters;
         try {
             url = new URL(buildUri.toString());
 
-            Log.i("URL",url.toString());
-
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -83,7 +79,7 @@ import static com.jasonbutwell.popularmovies.Api.TMDBInfo.queryFilters;
 
     // Quick way to build an Image URL to fetch image extracted from JSON
     public static String buildImageURL(String imageName) {
-        return (com.jasonbutwell.popularmovies.Api.TMDBInfo.BASE_IMAGE_URL+IMAGE_SIZE+imageName);
+        return (TMDBInfo.BASE_IMAGE_URL+IMAGE_SIZE+imageName);
     }
 
     // Builds the base URL to retrieve the JSON
@@ -97,8 +93,6 @@ import static com.jasonbutwell.popularmovies.Api.TMDBInfo.queryFilters;
 
         try {
             url = new URL(buildUri.toString());
-
-            Log.i("URL", url.toString());
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -139,9 +133,7 @@ import static com.jasonbutwell.popularmovies.Api.TMDBInfo.queryFilters;
 
     // Get the sort query component as a string
     public static String getSortByText(int id) {
-        if ( id < queryFilters.length )
-            return queryFilters[id];
-        else
-            return "";
+
+        return (id < queryFilters.length ? queryFilters[id] : "");
     }
 }

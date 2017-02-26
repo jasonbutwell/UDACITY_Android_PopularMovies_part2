@@ -37,7 +37,6 @@ public class TMDBQueryDetailsTask extends AsyncTask<URL, Void, String> {
     protected String doInBackground(URL... urls) {
 
         String data = null;
-
         URL searchURL = null;
         searchURL = urls[0];
 
