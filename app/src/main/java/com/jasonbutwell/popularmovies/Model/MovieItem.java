@@ -31,6 +31,38 @@ public class MovieItem extends MovieItemBasic {
         this.posterURL = posterURL;
     }
 
+    public int getTrailersSize() {
+        return trailers.size();
+    }
+
+    public int getReviewsSize() {
+        return reviews.size();
+    }
+
+    public void setTrailers(ArrayList<TrailerItem> trailers) {
+        this.trailers = trailers;
+    }
+
+    public void setReviews( ArrayList<ReviewItem> reviews) {
+        this.reviews = reviews;
+    }
+
+    public ReviewItem getReviewAt( int index ) {
+        return (reviews.size()>index) ? reviews.get(index) : null;
+    }
+
+    public TrailerItem getTrailerAt( int index ) {
+        return (trailers.size()>index) ? trailers.get(index) : null;
+    }
+
+    public ArrayList<TrailerItem> getTrailers() {
+        return trailers;
+    }
+
+    public ArrayList<ReviewItem> getReviews() {
+        return reviews;
+    }
+
     public String getPlotSynopsis() {
         return plotSynopsis;
     }

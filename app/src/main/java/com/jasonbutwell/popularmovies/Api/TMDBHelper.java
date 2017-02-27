@@ -18,6 +18,10 @@ import static com.jasonbutwell.popularmovies.Api.TMDBInfo.BASE_URL;
 import static com.jasonbutwell.popularmovies.Api.TMDBInfo.IMAGE_SIZE;
 import static com.jasonbutwell.popularmovies.Api.TMDBInfo.PARAM_API_KEY;
 import static com.jasonbutwell.popularmovies.Api.TMDBInfo.PARAM_PAGE;
+import static com.jasonbutwell.popularmovies.Api.TMDBInfo.PARAM_YOUTUBE_VIEW;
+import static com.jasonbutwell.popularmovies.Api.TMDBInfo.TRAILERS;
+import static com.jasonbutwell.popularmovies.Api.TMDBInfo.YOUTUBE_BASE_URL;
+import static com.jasonbutwell.popularmovies.Api.TMDBInfo.YOUTUBE_THUMBNAIL;
 import static com.jasonbutwell.popularmovies.Api.TMDBInfo.filterQuery;
 import static com.jasonbutwell.popularmovies.Api.TMDBInfo.queryFilters;
 
@@ -77,7 +81,6 @@ import static com.jasonbutwell.popularmovies.Api.TMDBInfo.queryFilters;
                 Uri.parse(BASE_URL).buildUpon()
                 .appendPath(id)
                 .appendQueryParameter(PARAM_API_KEY, APIKey.get());
-
         try {
             url = new URL(buildUri.toString());
 
@@ -86,6 +89,44 @@ import static com.jasonbutwell.popularmovies.Api.TMDBInfo.queryFilters;
         }
 
         return url;
+    }
+
+    public static URL buildTrailersURL( String id ) {
+        URL url = null;
+
+        Uri.Builder buildUri =
+                Uri.parse(BASE_URL).buildUpon()
+                        .appendPath(id)
+                        .appendPath(TRAILERS)
+                        .appendQueryParameter(PARAM_API_KEY, APIKey.get());
+        try {
+            url = new URL(buildUri.toString());
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return url;
+    }
+
+    public static String getYouTubeThumbnailURL( String key ) {
+        return TMDBInfo.YOUTUBE_IMG_BASE_URL + key + "/" + YOUTUBE_THUMBNAIL;
+    }
+
+    // Needed to take our key and transform it into a proper youtube URL
+    public static String buildYouTubeURL( String key ) {
+        String youTubeURL = null;
+
+        Uri.Builder buildUri = Uri.parse(YOUTUBE_BASE_URL).buildUpon()
+                .appendQueryParameter(PARAM_YOUTUBE_VIEW, key);
+
+        try {
+            youTubeURL = new URL(buildUri.toString()).toString();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return youTubeURL;
     }
 
     // Quick way to build an Image URL to fetch image extracted from JSON

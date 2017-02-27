@@ -4,6 +4,7 @@ import com.jasonbutwell.popularmovies.Api.TMDBHelper;
 import com.jasonbutwell.popularmovies.Api.TMDBInfo;
 import com.jasonbutwell.popularmovies.Model.MovieItem;
 import com.jasonbutwell.popularmovies.Model.MovieItemBasic;
+import com.jasonbutwell.popularmovies.Model.TrailerItem;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -115,5 +116,56 @@ public class JSONUtils {
             }
         }
         return movies;
+    }
+
+    public static ArrayList<TrailerItem> extractTrailersJSONArray(String JSONData)  {
+
+        ArrayList<TrailerItem> trailers = new ArrayList<>();
+
+        JSONArray trailerDataArray = null;
+        String JSONArray_start = "results";
+
+        JSONObject trailerData = null;
+
+        try {
+            trailerData = new JSONObject( JSONData );
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            if (trailerData != null) {
+                trailerDataArray = trailerData.getJSONArray( JSONArray_start );
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        if (trailerDataArray != null) {
+            for ( int i=0; i < trailerDataArray.length(); i++ ) {
+                JSONObject trailerItem = null;
+                try {
+                    trailerItem = trailerDataArray.getJSONObject( i );
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                String mName = "", mKey = "";
+
+                try {
+                    if (trailerItem != null) {
+                        // extract the field strings needed
+                        mName = trailerItem.getString(TMDBInfo.TRAILER_NAME);
+                        mKey = trailerItem.getString(TMDBInfo.TRAILER_KEY);
+
+                        // add the new Trailer to the array list
+                        trailers.add( new TrailerItem(mName, mKey, TMDBHelper.getYouTubeThumbnailURL(mKey)) );
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return trailers;
     }
 }

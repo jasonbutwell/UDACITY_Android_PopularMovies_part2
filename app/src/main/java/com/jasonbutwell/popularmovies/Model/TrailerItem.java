@@ -8,22 +8,24 @@ public class TrailerItem {
     private String id;
     private String description;
     private String youtubeURL;
+    private String youtubeThumbnailURL;
 
     public TrailerItem() {}
 
-    public TrailerItem(String id, String description, String youtubeURL) {
-        this.id = id;
+    public TrailerItem(String description, String youtubeURL, String youtubeThumbnailURL) {
+//        this.id = id;
         this.description = description;
         this.youtubeURL = youtubeURL;
+        this.youtubeThumbnailURL = youtubeThumbnailURL;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
+//    public String getId() {
+//        return id;
+//    }
+//
+//    public void setId(String id) {
+//        this.id = id;
+//    }
 
     public String getDescription() {
         return description;
@@ -39,5 +41,13 @@ public class TrailerItem {
 
     public void setYoutubeURL(String youtubeURL) {
         this.youtubeURL = youtubeURL;
+    }
+
+    public String getYoutubeThumbnailURL() {
+        return youtubeThumbnailURL;
+    }
+
+    public void setYoutubeThumbnailURL(String youtubeThumbnailURL) {
+        this.youtubeThumbnailURL = youtubeThumbnailURL;
     }
 }

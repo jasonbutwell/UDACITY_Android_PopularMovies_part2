@@ -7,7 +7,9 @@ import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 
 import com.jasonbutwell.popularmovies.Api.TMDBHelper;
+import com.jasonbutwell.popularmovies.Listener.MovieDetailTaskCompleteListener;
 import com.jasonbutwell.popularmovies.Model.MovieItem;
+import com.jasonbutwell.popularmovies.Model.TrailerItem;
 import com.jasonbutwell.popularmovies.Network.NetworkUtils;
 import com.jasonbutwell.popularmovies.Ui.LoadingIndicator;
 import com.jasonbutwell.popularmovies.Ui.MovieDetail;
@@ -18,6 +20,7 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 
 /**
  * Created by J on 26/02/2017.
@@ -29,6 +32,7 @@ public class TMDBDetailsLoader implements LoaderManager.LoaderCallbacks<MovieIte
 
     private Context mContext;
     private ActivityMovieDetailsBinding mBinding;
+    private MovieDetailTaskCompleteListener completeListener;
 
     //private LoaderManager mLoaderManager;
     //private MovieDetailTaskCompleteListener listener;
@@ -38,15 +42,16 @@ public class TMDBDetailsLoader implements LoaderManager.LoaderCallbacks<MovieIte
 
     private String mId, mPosterURL;
 
-    public TMDBDetailsLoader(Context context, LoaderManager loaderManager, ActivityMovieDetailsBinding binding, String id, String posterURL) {
+    public TMDBDetailsLoader(Context context, LoaderManager loaderManager, ActivityMovieDetailsBinding binding, String id, String posterURL, MovieDetailTaskCompleteListener completeListener) {
         mContext = context;
         mBinding = binding;
+        this.completeListener = completeListener;
 
         mId = id;
         mPosterURL = posterURL;
 
-        //mMovieId = movieId;
-        //mLoaderManager = loaderManager;
+//        mMovieId = movieId;
+//        mLoaderManager = loaderManager;
 
 //        Bundle queryBundle = new Bundle();
 //        queryBundle.putString(LOADER_ID_STRING, TMDBHelper.buildDetailURL(mMovieId).toString());
@@ -73,13 +78,19 @@ public class TMDBDetailsLoader implements LoaderManager.LoaderCallbacks<MovieIte
             @Override
             public MovieItem loadInBackground() {
                 String queryString = TMDBHelper.buildDetailURL(mId).toString();
+                String trailersQueryString = TMDBHelper.buildTrailersURL(mId).toString();
+
                 String jsonData="";
+                String jsonDataTrailers="";
+
+                ArrayList<TrailerItem> trailers = null;
                 MovieItem movie = null;
 
                 if (queryString == null) return null;
 
                 try {
                     jsonData = NetworkUtils.getResponseFromHttpUrl(new URL(queryString));
+                    jsonDataTrailers = NetworkUtils.getResponseFromHttpUrl(new URL(trailersQueryString));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -88,10 +99,12 @@ public class TMDBDetailsLoader implements LoaderManager.LoaderCallbacks<MovieIte
                     movie = JSONUtils.extractJSONArray( jsonData, "");
                     movie.setPosterURL(mPosterURL);
 
+                    trailers = JSONUtils.extractTrailersJSONArray(jsonDataTrailers);
+                    movie.setTrailers(trailers);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
                 return movie;
             }
         };
@@ -103,6 +116,7 @@ public class TMDBDetailsLoader implements LoaderManager.LoaderCallbacks<MovieIte
     public void onLoadFinished(Loader<MovieItem> loader, MovieItem movie) {
         MovieDetail.setUI( mContext, movie, mBinding );
         LoadingIndicator.show(mBinding, false);
+        completeListener.onTaskComplete(movie);
     }
 
     @Override

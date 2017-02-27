@@ -16,11 +16,17 @@ public class TMDBInfo {
     public static final String MOVIE_VOTES = "vote_average";
     public static final String MOVIE_RUNTIME = "runtime";
 
+    // Trailer JSON fields
+    public static final String TRAILER_NAME = "name";
+    public static final String TRAILER_KEY = "key";
+
 //    public static final String MOVIE_BACKGROUND = "backdrop_path";
 //    public static final String MOVIE_ADULT = "adult";
 //    public static final String MOVIE_DURATION = "duration";
 
     // For building the base URL and image URLs
+    public static final String YOUTUBE_IMG_BASE_URL = "https://img.youtube.com/vi/";
+    public static final String YOUTUBE_BASE_URL = "https://www.youtube.com/watch?";
     public static final String BASE_URL = "https://api.themoviedb.org/3/movie/";
     public static final String BASE_IMAGE_URL = "https://image.tmdb.org/t/p/";
     public static final String IMAGE_SIZE = "w185";
@@ -29,6 +35,10 @@ public class TMDBInfo {
 //    public static final String PARAM_SORTBY = "sort_by";
     public static final String PARAM_API_KEY = "api_key";
     public static final String PARAM_PAGE = "page";
+    public static final String PARAM_YOUTUBE_VIEW = "v";
+
+    public static final String TRAILERS = "videos";
+    public static final String YOUTUBE_THUMBNAIL = "0.jpg";
 
     // Used for sorting
     public static final int POPULAR = 0, TOP_RATED = 1;
