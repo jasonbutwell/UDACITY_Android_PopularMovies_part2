@@ -32,24 +32,38 @@ public class MovieDetail {
         context.startActivity(movieDetailsIntent);
     }
 
+    // Used to check if the youtube package is installed by its official package name
+    // If no YouTube app installed, then the URL is to be opened in the web browser instead
+
     public static void launchYouTubeIntent(Context context, TrailerItem trailer ) {
         if ( context != null && trailer != null ) {
-            // Used to check if the youtube package is installed by its official package name
-            Intent youTubeIntent = context.getPackageManager().getLaunchIntentForPackage(TMDBInfo.YOUTUBE_PACKAGE_NAME);
-
             // Display a message to say what trailer we are opening
             Toast.makeText(context, "Opening " + trailer.getDescription(), Toast.LENGTH_SHORT).show();
 
             // If the youTube Intent is not null then the package was found, so we can open the YouTube app
-            if (youTubeIntent != null) {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(TMDBInfo.YOUTUBE_URI + trailer.getYoutubeURL()));
-                context.startActivity(intent);
-            } else {
-                // If no YouTube app installed, then the URL is to be opened in the web browser instead
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(TMDBHelper.buildYouTubeURL(trailer.getYoutubeURL())));
-                context.startActivity(browserIntent);
-            }
+            if ( checkPackageInstalled(context, TMDBInfo.YOUTUBE_PACKAGE_NAME) )
+                openURI(context, TMDBInfo.YOUTUBE_URI + trailer.getYoutubeURL());
+            else
+                openBrowserURL( context, trailer.getYoutubeURL());
         }
+    }
+
+    // Check to see if a particular software package is installed
+    public static boolean checkPackageInstalled( Context context, String packageName ) {
+        Intent youTubeIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
+        return youTubeIntent != null;
+    }
+
+    // Open a specified URI
+    public static void openURI(Context context, String URIString ) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(URIString));
+        context.startActivity(intent);
+    }
+
+    // Open a URL in the web browser
+    public static void openBrowserURL(Context context, String url ) {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(TMDBHelper.buildYouTubeURL(url)));
+        context.startActivity(browserIntent);
     }
 
     // Generate a MovieItem object based on information pulled from the Intent
