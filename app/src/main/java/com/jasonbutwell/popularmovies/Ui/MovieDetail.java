@@ -2,11 +2,15 @@ package com.jasonbutwell.popularmovies.Ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.widget.Toast;
 
 import com.jasonbutwell.popularmovies.Api.PicassoImageHelper;
+import com.jasonbutwell.popularmovies.Api.TMDBHelper;
 import com.jasonbutwell.popularmovies.Api.TMDBInfo;
 import com.jasonbutwell.popularmovies.Model.MovieItem;
 import com.jasonbutwell.popularmovies.Model.MovieItemBasic;
+import com.jasonbutwell.popularmovies.Model.TrailerItem;
 import com.jasonbutwell.popularmovies.Utils.DateTimeUtils;
 import com.jasonbutwell.popularmovies.databinding.ActivityMovieDetailsBinding;
 
@@ -26,6 +30,26 @@ public class MovieDetail {
         movieDetailsIntent.putExtra( TMDBInfo.MOVIE_ID, movieItem.getId());
         movieDetailsIntent.putExtra( TMDBInfo.MOVIE_POSTER, movieItem.getPosterURL() );
         context.startActivity(movieDetailsIntent);
+    }
+
+    public static void launchYouTubeIntent(Context context, TrailerItem trailer ) {
+        if ( context != null && trailer != null ) {
+            // Used to check if the youtube package is installed by its official package name
+            Intent youTubeIntent = context.getPackageManager().getLaunchIntentForPackage(TMDBInfo.YOUTUBE_PACKAGE_NAME);
+
+            // Display a message to say what trailer we are opening
+            Toast.makeText(context, "Opening " + trailer.getDescription(), Toast.LENGTH_SHORT).show();
+
+            // If the youTube Intent is not null then the package was found, so we can open the YouTube app
+            if (youTubeIntent != null) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(TMDBInfo.YOUTUBE_URI + trailer.getYoutubeURL()));
+                context.startActivity(intent);
+            } else {
+                // If no YouTube app installed, then the URL is to be opened in the web browser instead
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(TMDBHelper.buildYouTubeURL(trailer.getYoutubeURL())));
+                context.startActivity(browserIntent);
+            }
+        }
     }
 
     // Generate a MovieItem object based on information pulled from the Intent

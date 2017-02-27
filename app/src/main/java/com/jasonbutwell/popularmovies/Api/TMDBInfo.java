@@ -6,6 +6,7 @@ package com.jasonbutwell.popularmovies.Api;
 public class TMDBInfo {
 
     public static final int NO_OF_POSTERS_PER_ROW = 2;  // For the Recycler layout manager
+    public static final int NO_OF_TRAILERS_PER_ROW = 3; // For the Recycler's grid layout
 
     // string literals to facilitate easier extracting of fields from the JSON data
     public static final String MOVIE_ID = "id";
@@ -19,6 +20,9 @@ public class TMDBInfo {
     // Trailer JSON fields
     public static final String TRAILER_NAME = "name";
     public static final String TRAILER_KEY = "key";
+
+    public static final String YOUTUBE_URI = "vnd.youtube://";
+    public static final String YOUTUBE_PACKAGE_NAME = "com.google.android.youtube";
 
 //    public static final String MOVIE_BACKGROUND = "backdrop_path";
 //    public static final String MOVIE_ADULT = "adult";
