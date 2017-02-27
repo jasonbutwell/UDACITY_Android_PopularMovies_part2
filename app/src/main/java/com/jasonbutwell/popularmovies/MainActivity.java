@@ -2,8 +2,10 @@ package com.jasonbutwell.popularmovies;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +28,9 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
     // Enable binding so we can access UI view components easier
     MoviePosterLayoutBinding binding;
     private MovieRecyclerViewAdapter mAdapter;
+    private RecyclerView.LayoutManager layoutManager;
+
+    public static final String LIST_STATE_KEY = "movie_recycler_list";
 
     // This is where we will store our movies
     private ArrayList<MovieItemBasic> movies = new ArrayList<>();
@@ -36,7 +41,9 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
 
         binding = DataBindingUtil.setContentView(this, R.layout.movie_poster_layout);
 
-        binding.moviePosterView.setLayoutManager(new GridLayoutManager(this,TMDBInfo.NO_OF_POSTERS_PER_ROW));
+        layoutManager = new GridLayoutManager(this,TMDBInfo.NO_OF_POSTERS_PER_ROW);
+
+        binding.moviePosterView.setLayoutManager(layoutManager);
         binding.moviePosterView.setHasFixedSize(true);
 
         mAdapter = new MovieRecyclerViewAdapter(this, movies, this);
@@ -44,6 +51,30 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
 
         // Load popular as default initially - (To be replaced by sharedPreferences)
         loadMovies(TMDBInfo.POPULAR);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle state) {
+        super.onSaveInstanceState(state);
+        state.putParcelable(LIST_STATE_KEY, layoutManager.onSaveInstanceState());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle state) {
+        super.onRestoreInstanceState(state);
+        Parcelable listState = state.getParcelable(LIST_STATE_KEY);
+        restoreState(listState);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    public void restoreState(Parcelable listState ) {
+        if (listState != null) {
+            layoutManager.onRestoreInstanceState(listState);
+        }
     }
 
     // Create our options menu so we can filter movies by (1.Popular, 2.Top rated)
