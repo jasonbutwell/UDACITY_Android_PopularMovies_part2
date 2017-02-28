@@ -50,7 +50,7 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MoviePosterVi
     // Calls our view holder with the position of the item to show
     @Override
     public void onBindViewHolder(MoviePosterViewHolder holder, int position) {
-        holder.bind(context, movies.get(position));
+        holder.bind(context, movies.get(position).getPosterURL());
     }
 
     // Returns back the number of items to show

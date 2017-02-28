@@ -2,14 +2,16 @@ package com.jasonbutwell.popularmovies.Api;
 
 import android.content.Context;
 import android.net.Uri;
+import android.support.v4.app.LoaderManager;
 
-import com.jasonbutwell.popularmovies.BackgroundTask.TMDBQueryTask;
+import com.jasonbutwell.popularmovies.BackgroundTask.TMDBLoader;
 import com.jasonbutwell.popularmovies.Listener.MovieTaskCompleteListener;
 import com.jasonbutwell.popularmovies.Model.MovieItem;
 import com.jasonbutwell.popularmovies.Model.MovieItemBasic;
 import com.jasonbutwell.popularmovies.Network.NetworkUtils;
 import com.jasonbutwell.popularmovies.R;
 import com.jasonbutwell.popularmovies.Ui.LoadingIndicator;
+import com.jasonbutwell.popularmovies.databinding.MoviePosterLayoutBinding;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -58,7 +60,7 @@ import static com.jasonbutwell.popularmovies.Api.TMDBInfo.queryFilters;
     }
 
     // Load initial movie info for posters
-    public static void loadMovieData(Context context, MovieTaskCompleteListener listener, int sortByParam, Object binding ) {
+    public static void loadMovieData(Context context, MovieTaskCompleteListener listener, int sortByParam, Object binding, LoaderManager loaderManager ) {
 
         String errorMessage = context.getString(R.string.network_error_message);
 
@@ -68,9 +70,10 @@ import static com.jasonbutwell.popularmovies.Api.TMDBInfo.queryFilters;
         }                                                                       // show the error message and retry button
         else {
             LoadingIndicator.showError(binding, false, "");                              // clear and hide the error message
-            TMDBHelper.setSortByText(sortByParam);                              // set to sort by selected parameter
 
-            new TMDBQueryTask(listener,binding).execute(TMDBHelper.buildBaseURL());     // create new query to download
+            TMDBHelper.setSortByText(sortByParam);                              // set to sort by selected parameter
+            //new TMDBQueryTask(listener,binding).execute(TMDBHelper.buildBaseURL());     // create new query to download
+            new TMDBLoader(context, loaderManager, (MoviePosterLayoutBinding)binding, listener);
         }                                                                       // and extract the JSON data
     }
 

@@ -2,7 +2,6 @@ package com.jasonbutwell.popularmovies;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,7 +25,7 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
     // IMPORTANT! - Replace API KEY in 'Api / APIKey.java' with your own 'TMDB API KEY'
 
     // Enable binding so we can access UI view components easier
-    MoviePosterLayoutBinding binding;
+    private MoviePosterLayoutBinding binding;
     private MovieRecyclerViewAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
@@ -56,26 +55,26 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
     @Override
     protected void onSaveInstanceState(Bundle state) {
         super.onSaveInstanceState(state);
-        state.putParcelable(LIST_STATE_KEY, layoutManager.onSaveInstanceState());
+//        state.putParcelable(LIST_STATE_KEY, layoutManager.onSaveInstanceState());
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle state) {
         super.onRestoreInstanceState(state);
-        Parcelable listState = state.getParcelable(LIST_STATE_KEY);
-        restoreState(listState);
+//        Parcelable listState = state.getParcelable(LIST_STATE_KEY);
+//        restoreState(listState);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    public void restoreState(Parcelable listState ) {
-        if (listState != null) {
-            layoutManager.onRestoreInstanceState(listState);
-        }
-    }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//    }
+//
+//    public void restoreState(Parcelable listState ) {
+//        if (listState != null) {
+//            layoutManager.onRestoreInstanceState(listState);
+//        }
+//    }
 
     // Create our options menu so we can filter movies by (1.Popular, 2.Top rated)
     @Override
@@ -105,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
 
     // Loads movies by sort order
     private void loadMovies( int sortByParam ) {
-        TMDBHelper.loadMovieData(getApplicationContext(), this, sortByParam, binding );
+        TMDBHelper.loadMovieData(getApplicationContext(), this, sortByParam, binding, getSupportLoaderManager() );
         // Reset position of GridView
         binding.moviePosterView.getLayoutManager().smoothScrollToPosition(binding.moviePosterView,null,0);
     }
@@ -119,9 +118,10 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
     // Callback for when the asyncTask completes
     @Override
     public void onTaskComplete(ArrayList<MovieItemBasic> moviesData) {
+
         movies.clear();                 // update the movie list arraylist and then the adapter
         movies.addAll(moviesData);
-        mAdapter.setData(movies);       // reset the data set for the adapter
+        mAdapter.setData(movies);       // reset the data set for the adapter#
     }
 
     // Do not touch this as it's called from the XML layout

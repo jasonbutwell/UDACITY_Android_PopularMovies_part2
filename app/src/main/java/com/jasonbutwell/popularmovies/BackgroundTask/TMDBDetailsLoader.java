@@ -31,21 +31,20 @@ public class TMDBDetailsLoader implements LoaderManager.LoaderCallbacks<MovieIte
     private static final int LOADER_ID = 1;
 
     private Context mContext;
-    private ActivityMovieDetailsBinding mBinding;
-    private MovieDetailTaskCompleteListener completeListener;
+    private Object mBinding;
+    private MovieDetailTaskCompleteListener mListener;
 
     //private LoaderManager mLoaderManager;
     //private MovieDetailTaskCompleteListener listener;
     //private static String LOADER_ID_STRING = "json";
-
     //private String mMovieId;
 
     private String mId, mPosterURL;
 
-    public TMDBDetailsLoader(Context context, LoaderManager loaderManager, ActivityMovieDetailsBinding binding, String id, String posterURL, MovieDetailTaskCompleteListener completeListener) {
+    public TMDBDetailsLoader(Context context, LoaderManager loaderManager, ActivityMovieDetailsBinding binding, String id, String posterURL, MovieDetailTaskCompleteListener listener) {
         mContext = context;
         mBinding = binding;
-        this.completeListener = completeListener;
+        mListener = listener;
 
         mId = id;
         mPosterURL = posterURL;
@@ -69,7 +68,6 @@ public class TMDBDetailsLoader implements LoaderManager.LoaderCallbacks<MovieIte
             @Override
             protected void onStartLoading() {
                 super.onStartLoading();
-                //if (args == null) return;
 
                 LoadingIndicator.show(mBinding, true);
                 forceLoad();
@@ -114,9 +112,9 @@ public class TMDBDetailsLoader implements LoaderManager.LoaderCallbacks<MovieIte
 
     @Override
     public void onLoadFinished(Loader<MovieItem> loader, MovieItem movie) {
-        MovieDetail.setUI( mContext, movie, mBinding );
+        MovieDetail.setUI( mContext, movie, (ActivityMovieDetailsBinding)mBinding );
         LoadingIndicator.show(mBinding, false);
-        completeListener.onTaskComplete(movie);
+        mListener.onTaskComplete(movie);
     }
 
     @Override
