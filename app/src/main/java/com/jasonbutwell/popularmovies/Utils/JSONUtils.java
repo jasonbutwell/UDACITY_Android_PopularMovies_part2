@@ -4,6 +4,7 @@ import com.jasonbutwell.popularmovies.Api.TMDBHelper;
 import com.jasonbutwell.popularmovies.Api.TMDBInfo;
 import com.jasonbutwell.popularmovies.Model.MovieItem;
 import com.jasonbutwell.popularmovies.Model.MovieItemBasic;
+import com.jasonbutwell.popularmovies.Model.ReviewItem;
 import com.jasonbutwell.popularmovies.Model.TrailerItem;
 
 import org.json.JSONArray;
@@ -167,5 +168,58 @@ public class JSONUtils {
             }
         }
         return trailers;
+    }
+
+    public static ArrayList<ReviewItem> extractReviewsJSONArray(String JSONData)  {
+
+        ArrayList<ReviewItem> reviews = new ArrayList<>();
+
+        JSONArray reviewDataArray = null;
+        String JSONArray_start = "results";
+
+        JSONObject reviewData = null;
+
+        try {
+            reviewData = new JSONObject( JSONData );
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            if (reviewData != null) {
+                reviewDataArray = reviewData.getJSONArray( JSONArray_start );
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        if (reviewDataArray != null) {
+            for ( int i=0; i < reviewDataArray.length(); i++ ) {
+                JSONObject reviewItem = null;
+                try {
+                    reviewItem = reviewDataArray.getJSONObject( i );
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                String mId = "", mAuthor = "", mContent = "", mUrl = "";
+
+                try {
+                        // extract the field strings needed
+
+                        mId = reviewItem.getString(TMDBInfo.REVIEW_ID);
+                        mAuthor = reviewItem.getString(TMDBInfo.REVIEW_AUTHOR);
+                        mContent = reviewItem.getString(TMDBInfo.REVIEW_CONTENT);
+                        mUrl = reviewItem.getString(TMDBInfo.REVIEW_URL);
+
+                        // add the new Trailer to the array list
+                        reviews.add( new ReviewItem(mId, mAuthor, mContent, mUrl) );
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return reviews;
     }
 }

@@ -9,6 +9,7 @@ import android.support.v4.content.Loader;
 import com.jasonbutwell.popularmovies.Api.TMDBHelper;
 import com.jasonbutwell.popularmovies.Listener.MovieDetailTaskCompleteListener;
 import com.jasonbutwell.popularmovies.Model.MovieItem;
+import com.jasonbutwell.popularmovies.Model.ReviewItem;
 import com.jasonbutwell.popularmovies.Model.TrailerItem;
 import com.jasonbutwell.popularmovies.Network.NetworkUtils;
 import com.jasonbutwell.popularmovies.Ui.LoadingIndicator;
@@ -51,7 +52,6 @@ public class TMDBDetailsLoader implements LoaderManager.LoaderCallbacks<MovieIte
 
 //        mMovieId = movieId;
 //        mLoaderManager = loaderManager;
-
 //        Bundle queryBundle = new Bundle();
 //        queryBundle.putString(LOADER_ID_STRING, TMDBHelper.buildDetailURL(mMovieId).toString());
 
@@ -77,28 +77,40 @@ public class TMDBDetailsLoader implements LoaderManager.LoaderCallbacks<MovieIte
             public MovieItem loadInBackground() {
                 String queryString = TMDBHelper.buildDetailURL(mId).toString();
                 String trailersQueryString = TMDBHelper.buildTrailersURL(mId).toString();
+                String reviewsQueryString = TMDBHelper.buildReviewsURL(mId).toString();
 
                 String jsonData="";
                 String jsonDataTrailers="";
+                String jsonDataReviews="";
 
                 ArrayList<TrailerItem> trailers = null;
+                ArrayList<ReviewItem> reviews;
                 MovieItem movie = null;
 
-                if (queryString == null) return null;
+                if (queryString == null && trailersQueryString == null && reviewsQueryString == null) return null;
 
                 try {
+
                     jsonData = NetworkUtils.getResponseFromHttpUrl(new URL(queryString));
                     jsonDataTrailers = NetworkUtils.getResponseFromHttpUrl(new URL(trailersQueryString));
+                    jsonDataReviews = NetworkUtils.getResponseFromHttpUrl(new URL(reviewsQueryString));
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
 
                 try {
+                    // Extract movie specific data from JSON
                     movie = JSONUtils.extractJSONArray( jsonData, "");
                     movie.setPosterURL(mPosterURL);
 
+                    // Extract trailer specific data and store in the movie object
                     trailers = JSONUtils.extractTrailersJSONArray(jsonDataTrailers);
                     movie.setTrailers(trailers);
+
+                    // Extract review specific data and store in the movie object
+                    reviews = JSONUtils.extractReviewsJSONArray(jsonDataReviews);
+                    movie.setReviews(reviews);
 
                 } catch (JSONException e) {
                     e.printStackTrace();

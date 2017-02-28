@@ -55,26 +55,12 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
     @Override
     protected void onSaveInstanceState(Bundle state) {
         super.onSaveInstanceState(state);
-//        state.putParcelable(LIST_STATE_KEY, layoutManager.onSaveInstanceState());
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle state) {
         super.onRestoreInstanceState(state);
-//        Parcelable listState = state.getParcelable(LIST_STATE_KEY);
-//        restoreState(listState);
     }
-
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//    }
-//
-//    public void restoreState(Parcelable listState ) {
-//        if (listState != null) {
-//            layoutManager.onRestoreInstanceState(listState);
-//        }
-//    }
 
     // Create our options menu so we can filter movies by (1.Popular, 2.Top rated)
     @Override
@@ -110,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
 
         TMDBHelper.loadMovieData(getApplicationContext(), this, sortByParam, binding, getSupportLoaderManager() );
         // Reset position of GridView
-        binding.moviePosterView.getLayoutManager().smoothScrollToPosition(binding.moviePosterView,null,0);
+        //binding.moviePosterView.getLayoutManager().smoothScrollToPosition(binding.moviePosterView,null,0);
     }
 
     // When a movie poster in the RecyclerView is clicked on
@@ -124,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
     public void onTaskComplete(ArrayList<MovieItemBasic> moviesData) {
         //movies.clear();                 // update the movie list arraylist and then the adapter
         movies.addAll(moviesData);
-        mAdapter.setData(movies);       // reset the data set for the adapter#
+        mAdapter.setData(movies);       // reset the data set for the adapter
     }
 
     // Do not touch this as it's called from the XML layout

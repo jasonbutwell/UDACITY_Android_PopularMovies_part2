@@ -21,6 +21,7 @@ import static com.jasonbutwell.popularmovies.Api.TMDBInfo.IMAGE_SIZE;
 import static com.jasonbutwell.popularmovies.Api.TMDBInfo.PARAM_API_KEY;
 import static com.jasonbutwell.popularmovies.Api.TMDBInfo.PARAM_PAGE;
 import static com.jasonbutwell.popularmovies.Api.TMDBInfo.PARAM_YOUTUBE_VIEW;
+import static com.jasonbutwell.popularmovies.Api.TMDBInfo.REVIEWS;
 import static com.jasonbutwell.popularmovies.Api.TMDBInfo.TRAILERS;
 import static com.jasonbutwell.popularmovies.Api.TMDBInfo.YOUTUBE_BASE_URL;
 import static com.jasonbutwell.popularmovies.Api.TMDBInfo.YOUTUBE_THUMBNAIL;
@@ -101,6 +102,24 @@ import static com.jasonbutwell.popularmovies.Api.TMDBInfo.queryFilters;
                 Uri.parse(BASE_URL).buildUpon()
                         .appendPath(id)
                         .appendPath(TRAILERS)
+                        .appendQueryParameter(PARAM_API_KEY, APIKey.get());
+        try {
+            url = new URL(buildUri.toString());
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return url;
+    }
+
+    public static URL buildReviewsURL( String id ) {
+        URL url = null;
+
+        Uri.Builder buildUri =
+                Uri.parse(BASE_URL).buildUpon()
+                        .appendPath(id)
+                        .appendPath(REVIEWS)
                         .appendQueryParameter(PARAM_API_KEY, APIKey.get());
         try {
             url = new URL(buildUri.toString());

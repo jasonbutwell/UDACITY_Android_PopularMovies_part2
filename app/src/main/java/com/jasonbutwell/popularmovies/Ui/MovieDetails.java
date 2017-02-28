@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.jasonbutwell.popularmovies.Adapter.TrailerRecyclerViewAdapter;
@@ -14,6 +15,7 @@ import com.jasonbutwell.popularmovies.Listener.ListItemClickListener;
 import com.jasonbutwell.popularmovies.Listener.MovieDetailTaskCompleteListener;
 import com.jasonbutwell.popularmovies.Model.MovieItem;
 import com.jasonbutwell.popularmovies.Model.MovieItemBasic;
+import com.jasonbutwell.popularmovies.Model.ReviewItem;
 import com.jasonbutwell.popularmovies.Model.TrailerItem;
 import com.jasonbutwell.popularmovies.Network.NetworkUtils;
 import com.jasonbutwell.popularmovies.R;
@@ -72,5 +74,15 @@ public class MovieDetails extends AppCompatActivity implements ListItemClickList
         trailers.clear();
         trailers.addAll(movie.getTrailers());
         mAdapter.setData(trailers);              // reset the data set for the adapter
+
+        //  Testing the reviews
+        String TAG = "REVIEW";
+        for (int i =0; i < movie.getReviewsSize(); i++) {
+            ReviewItem review = movie.getReviews().get(i);
+            Log.i(TAG+":ID", review.getId());
+            Log.i(TAG+":AUTHOR", review.getAuthor());
+            Log.i(TAG+":REVIEW", review.getReview());
+            Log.i(TAG+":URL", review.getUrl());
+        }
     }
 }

@@ -1,4 +1,4 @@
-package com.jasonbutwell.popularmovies.BackgroundTask;
+package com.jasonbutwell.popularmovies._Deprecated;
 
 /**
  * Created by J on 25/02/2017.

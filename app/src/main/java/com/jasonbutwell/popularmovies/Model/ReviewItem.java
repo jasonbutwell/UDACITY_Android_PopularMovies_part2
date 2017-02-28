@@ -5,27 +5,27 @@ package com.jasonbutwell.popularmovies.Model;
  */
 
 public class ReviewItem {
-    //private String id;
+    private String id;
     private String author;
     private String review;
     private String url;
 
     public ReviewItem() {}
 
-    public ReviewItem(String author, String review, String url) {
-        //this.id = id;
+    public ReviewItem(String id, String author, String review, String url) {
+        this.id = id;
         this.author = author;
         this.review = review;
         this.url = url;
     }
 
-//    public String getId() {
-//        return id;
-//    }
-//
-//    public void setId(String id) {
-//        this.id = id;
-//    }
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getAuthor() {
         return author;
