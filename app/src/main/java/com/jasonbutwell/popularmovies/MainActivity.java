@@ -104,6 +104,10 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
 
     // Loads movies by sort order
     private void loadMovies( int sortByParam ) {
+
+        movies.clear();
+        mAdapter.setData(movies);       // clear what's in our movies and reset the adapter
+
         TMDBHelper.loadMovieData(getApplicationContext(), this, sortByParam, binding, getSupportLoaderManager() );
         // Reset position of GridView
         binding.moviePosterView.getLayoutManager().smoothScrollToPosition(binding.moviePosterView,null,0);
@@ -118,8 +122,7 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
     // Callback for when the asyncTask completes
     @Override
     public void onTaskComplete(ArrayList<MovieItemBasic> moviesData) {
-
-        movies.clear();                 // update the movie list arraylist and then the adapter
+        //movies.clear();                 // update the movie list arraylist and then the adapter
         movies.addAll(moviesData);
         mAdapter.setData(movies);       // reset the data set for the adapter#
     }

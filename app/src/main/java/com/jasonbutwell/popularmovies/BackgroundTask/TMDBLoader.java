@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
-import android.util.Log;
 
 import com.jasonbutwell.popularmovies.Api.TMDBHelper;
 import com.jasonbutwell.popularmovies.Listener.MovieTaskCompleteListener;
@@ -54,12 +53,10 @@ public class TMDBLoader implements LoaderManager.LoaderCallbacks<ArrayList<Movie
             protected void onStartLoading() {
                 super.onStartLoading();
 
+                // Workaround to stop this re-running when we navigate back to the activity
                 if ( !isLoaded) {
                     LoadingIndicator.show(mBinding, true);
-
-                    Log.i("LOADER", "START");
                     forceLoad();
-
                 }
             }
 
@@ -87,10 +84,9 @@ public class TMDBLoader implements LoaderManager.LoaderCallbacks<ArrayList<Movie
 
     @Override
     public void onLoadFinished(Loader<ArrayList<MovieItemBasic>> loader, ArrayList<MovieItemBasic> movieData) {
-        LoadingIndicator.show( mBinding, false );                   // Loading indicator invisible
+        LoadingIndicator.show( mBinding, false );   // Loading indicator invisible
         mListener.onTaskComplete(movieData);
-        Log.i("LOADER","END");
-        isLoaded = true;
+        isLoaded = true;                            // we have loaded so don't call onStartLoading when we navigate back
     }
 
     @Override

@@ -7,7 +7,10 @@ import android.widget.ImageView;
 
 import com.jasonbutwell.popularmovies.Api.PicassoImageHelper;
 import com.jasonbutwell.popularmovies.Listener.ListItemClickListener;
+import com.jasonbutwell.popularmovies.Model.MovieItemBasic;
 import com.jasonbutwell.popularmovies.R;
+
+import java.util.ArrayList;
 
 /**
  * Created by J on 25/02/2017.
@@ -25,16 +28,16 @@ public class MoviePosterViewHolder extends RecyclerView.ViewHolder implements Vi
 
         // Get a reference to the view to change
         posterImageView = (ImageView) itemView.findViewById(R.id.imageView);
-        
+
         this.mOnClickListener = mOnClickListener;
 
         // set our click listener to respond to that view item
         itemView.setOnClickListener(this);
     }
 
-    public void bind(Context context, String posterURL) {
+    public void bind(Context context, ArrayList<MovieItemBasic> movies, int position) {
 
-        PicassoImageHelper.loadImage( context, posterURL, posterImageView);
+        PicassoImageHelper.loadImage( context, movies.get(position).getPosterURL(), posterImageView);
     }
 
     // Our internal click handler that signifies what item was actually clicked
