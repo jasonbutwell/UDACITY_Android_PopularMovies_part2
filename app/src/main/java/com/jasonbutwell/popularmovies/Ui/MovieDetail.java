@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.widget.Toast;
 
+import com.jasonbutwell.popularmovies.Activity.MovieDetailsActivity;
 import com.jasonbutwell.popularmovies.Api.PicassoImageHelper;
 import com.jasonbutwell.popularmovies.Api.TMDBHelper;
 import com.jasonbutwell.popularmovies.Api.TMDBInfo;
@@ -23,7 +24,7 @@ public class MovieDetail {
     // Pass the selected movie's details to the intent to show that information to the user.
     public static void launchIntent(Context context, MovieItemBasic movieItem) {
 
-        Intent movieDetailsIntent = new Intent( context, MovieDetails.class );
+        Intent movieDetailsIntent = new Intent( context, MovieDetailsActivity.class );
         movieDetailsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         // Just store the id and poster in the intent for now

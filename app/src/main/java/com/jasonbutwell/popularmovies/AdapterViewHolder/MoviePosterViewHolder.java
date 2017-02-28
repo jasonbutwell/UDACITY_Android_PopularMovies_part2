@@ -1,4 +1,4 @@
-package com.jasonbutwell.popularmovies.Adapter;
+package com.jasonbutwell.popularmovies.AdapterViewHolder;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

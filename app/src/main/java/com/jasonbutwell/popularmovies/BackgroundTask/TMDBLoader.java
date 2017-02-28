@@ -12,7 +12,6 @@ import com.jasonbutwell.popularmovies.Model.MovieItemBasic;
 import com.jasonbutwell.popularmovies.Network.NetworkUtils;
 import com.jasonbutwell.popularmovies.Ui.LoadingIndicator;
 import com.jasonbutwell.popularmovies.Utils.JSONUtils;
-import com.jasonbutwell.popularmovies.databinding.MoviePosterLayoutBinding;
 
 import java.io.IOException;
 import java.net.URL;
@@ -32,7 +31,7 @@ public class TMDBLoader implements LoaderManager.LoaderCallbacks<ArrayList<Movie
 
     private static boolean isLoaded;
 
-    public TMDBLoader(Context context, LoaderManager loaderManager, MoviePosterLayoutBinding binding, MovieTaskCompleteListener listener) {
+    public TMDBLoader(Context context, LoaderManager loaderManager, Object binding, MovieTaskCompleteListener listener) {
         mContext = context;
         mBinding = binding;
         mListener = listener;

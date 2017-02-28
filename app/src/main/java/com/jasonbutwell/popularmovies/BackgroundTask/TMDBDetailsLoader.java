@@ -42,7 +42,7 @@ public class TMDBDetailsLoader implements LoaderManager.LoaderCallbacks<MovieIte
 
     private String mId, mPosterURL;
 
-    public TMDBDetailsLoader(Context context, LoaderManager loaderManager, ActivityMovieDetailsBinding binding, String id, String posterURL, MovieDetailTaskCompleteListener listener) {
+    public TMDBDetailsLoader(Context context, LoaderManager loaderManager, Object binding, String id, String posterURL, MovieDetailTaskCompleteListener listener) {
         mContext = context;
         mBinding = binding;
         mListener = listener;
@@ -79,9 +79,7 @@ public class TMDBDetailsLoader implements LoaderManager.LoaderCallbacks<MovieIte
                 String trailersQueryString = TMDBHelper.buildTrailersURL(mId).toString();
                 String reviewsQueryString = TMDBHelper.buildReviewsURL(mId).toString();
 
-                String jsonData="";
-                String jsonDataTrailers="";
-                String jsonDataReviews="";
+                String jsonData="", jsonDataTrailers="", jsonDataReviews="";
 
                 ArrayList<TrailerItem> trailers = null;
                 ArrayList<ReviewItem> reviews;

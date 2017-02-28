@@ -1,11 +1,10 @@
-package com.jasonbutwell.popularmovies.Ui;
+package com.jasonbutwell.popularmovies.Activity;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.jasonbutwell.popularmovies.Adapter.TrailerRecyclerViewAdapter;
@@ -15,15 +14,15 @@ import com.jasonbutwell.popularmovies.Listener.ListItemClickListener;
 import com.jasonbutwell.popularmovies.Listener.MovieDetailTaskCompleteListener;
 import com.jasonbutwell.popularmovies.Model.MovieItem;
 import com.jasonbutwell.popularmovies.Model.MovieItemBasic;
-import com.jasonbutwell.popularmovies.Model.ReviewItem;
 import com.jasonbutwell.popularmovies.Model.TrailerItem;
 import com.jasonbutwell.popularmovies.Network.NetworkUtils;
 import com.jasonbutwell.popularmovies.R;
+import com.jasonbutwell.popularmovies.Ui.MovieDetail;
 import com.jasonbutwell.popularmovies.databinding.ActivityMovieDetailsBinding;
 
 import java.util.ArrayList;
 
-public class MovieDetails extends AppCompatActivity implements ListItemClickListener,MovieDetailTaskCompleteListener {
+public class MovieDetailsActivity extends AppCompatActivity implements ListItemClickListener,MovieDetailTaskCompleteListener {
 
     // Use data binding to reduce boilerplate code
     public ActivityMovieDetailsBinding movieDetailsBinding;
@@ -49,9 +48,6 @@ public class MovieDetails extends AppCompatActivity implements ListItemClickList
 
         MovieItemBasic mMovie = MovieDetail.generateFromIntent(movieDetailsIntent);
 
-        // Update the UI with the details obtained
-        //MovieDetail.setUI( getApplicationContext(), MovieDetail.generateFromIntent(movieDetailsIntent), movieDetailsBinding );
-
         if ( !NetworkUtils.isNetworkAvailable(getApplicationContext()))
             Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.network_error_message), Toast.LENGTH_LONG).show();
         else {
@@ -76,13 +72,13 @@ public class MovieDetails extends AppCompatActivity implements ListItemClickList
         mAdapter.setData(trailers);              // reset the data set for the adapter
 
         //  Testing the reviews
-        String TAG = "REVIEW";
-        for (int i =0; i < movie.getReviewsSize(); i++) {
-            ReviewItem review = movie.getReviews().get(i);
-            Log.i(TAG+":ID", review.getId());
-            Log.i(TAG+":AUTHOR", review.getAuthor());
-            Log.i(TAG+":REVIEW", review.getReview());
-            Log.i(TAG+":URL", review.getUrl());
-        }
+//        String TAG = "REVIEW";
+//        for (int i =0; i < movie.getReviewsSize(); i++) {
+//            ReviewItem review = movie.getReviews().get(i);
+//            Log.i(TAG+":ID", review.getId());
+//            Log.i(TAG+":AUTHOR", review.getAuthor());
+//            Log.i(TAG+":REVIEW", review.getReview());
+//            Log.i(TAG+":URL", review.getUrl());
+//        }
     }
 }

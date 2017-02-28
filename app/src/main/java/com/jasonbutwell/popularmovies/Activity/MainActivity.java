@@ -1,4 +1,4 @@
-package com.jasonbutwell.popularmovies;
+package com.jasonbutwell.popularmovies.Activity;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -15,6 +15,7 @@ import com.jasonbutwell.popularmovies.Api.TMDBInfo;
 import com.jasonbutwell.popularmovies.Listener.ListItemClickListener;
 import com.jasonbutwell.popularmovies.Listener.MovieTaskCompleteListener;
 import com.jasonbutwell.popularmovies.Model.MovieItemBasic;
+import com.jasonbutwell.popularmovies.R;
 import com.jasonbutwell.popularmovies.Ui.MovieDetail;
 import com.jasonbutwell.popularmovies.databinding.MoviePosterLayoutBinding;
 
@@ -28,8 +29,6 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
     private MoviePosterLayoutBinding binding;
     private MovieRecyclerViewAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
-
-    public static final String LIST_STATE_KEY = "movie_recycler_list";
 
     // This is where we will store our movies
     private ArrayList<MovieItemBasic> movies = new ArrayList<>();
