@@ -5,7 +5,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
@@ -30,11 +29,9 @@ public final class NetworkUtils {
     public static String getResponseFromHttpUrl(URL url) throws IOException {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         try {
-            InputStream in = urlConnection.getInputStream();
-            Scanner scanner = new Scanner(in);
-            scanner.useDelimiter("\\A");
+            Scanner scanner = new Scanner( urlConnection.getInputStream() ).useDelimiter("\\A");
 
-            return (scanner.hasNext()? scanner.next() : null);
+            return (scanner.hasNext() ? scanner.next() : null);
 
         } finally {
             urlConnection.disconnect();

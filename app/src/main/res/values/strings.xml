@@ -6,4 +6,8 @@
     <string name="retry">Retry</string>
     <string name="image_description_movie_poster">Movie Poster</string>
     <string name="network_error_message">No connection :(</string>
+    <string name="review_Label">Review</string>
+    <string name="reviewed_by_Label">Review by</string>
+    <string name="trailers_Label">Trailers</string>
+    <string name="reviews_Label">Reviews</string>
 </resources>

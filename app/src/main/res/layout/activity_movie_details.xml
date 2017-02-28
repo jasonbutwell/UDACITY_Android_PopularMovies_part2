@@ -80,12 +80,43 @@
                 android:layout_below="@+id/moviePoster"
                 android:layout_marginTop="10dp"/>
 
+            <TextView
+                android:id="@+id/trailerHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/movieDescription"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="2dp"
+                android:text="@string/trailers_Label"
+                android:textStyle="bold"
+                android:textSize="15sp" />
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/movieTrailerView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/movieDescription"
-                android:paddingTop="20dp">
+                android:layout_below="@+id/trailerHeader"
+                android:paddingTop="10dp"
+                android:layout_marginBottom="5dp">
+            </android.support.v7.widget.RecyclerView>
+
+            <TextView
+                android:id="@+id/reviewsHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/movieTrailerView"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="2dp"
+                android:text="@string/reviews_Label"
+                android:textStyle="bold"
+                android:textSize="15sp" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/movieReviewView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/reviewsHeader"
+                android:paddingTop="5dp">
             </android.support.v7.widget.RecyclerView>
             </RelativeLayout>
          </ScrollView>

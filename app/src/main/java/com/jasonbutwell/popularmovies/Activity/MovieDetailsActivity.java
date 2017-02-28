@@ -5,8 +5,10 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.widget.Toast;
 
+import com.jasonbutwell.popularmovies.Adapter.ReviewRecyclerViewAdapter;
 import com.jasonbutwell.popularmovies.Adapter.TrailerRecyclerViewAdapter;
 import com.jasonbutwell.popularmovies.Api.TMDBInfo;
 import com.jasonbutwell.popularmovies.BackgroundTask.TMDBDetailsLoader;
@@ -14,6 +16,7 @@ import com.jasonbutwell.popularmovies.Listener.ListItemClickListener;
 import com.jasonbutwell.popularmovies.Listener.MovieDetailTaskCompleteListener;
 import com.jasonbutwell.popularmovies.Model.MovieItem;
 import com.jasonbutwell.popularmovies.Model.MovieItemBasic;
+import com.jasonbutwell.popularmovies.Model.ReviewItem;
 import com.jasonbutwell.popularmovies.Model.TrailerItem;
 import com.jasonbutwell.popularmovies.Network.NetworkUtils;
 import com.jasonbutwell.popularmovies.R;
@@ -26,9 +29,12 @@ public class MovieDetailsActivity extends AppCompatActivity implements ListItemC
 
     // Use data binding to reduce boilerplate code
     public ActivityMovieDetailsBinding movieDetailsBinding;
+
     private TrailerRecyclerViewAdapter mAdapter;
+    private ReviewRecyclerViewAdapter mReviewsAdapter;
 
     private ArrayList<TrailerItem> trailers = new ArrayList<>();
+    private ArrayList<ReviewItem> reviews = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +46,14 @@ public class MovieDetailsActivity extends AppCompatActivity implements ListItemC
         movieDetailsBinding.movieTrailerView.setLayoutManager(new GridLayoutManager(this, TMDBInfo.NO_OF_TRAILERS_PER_ROW));
         movieDetailsBinding.movieTrailerView.setHasFixedSize(true);
 
+        movieDetailsBinding.movieReviewView.setLayoutManager(new LinearLayoutManager(this));
+        movieDetailsBinding.movieReviewView.setHasFixedSize(true);
+
         mAdapter = new TrailerRecyclerViewAdapter(this, trailers, this);
+        mReviewsAdapter = new ReviewRecyclerViewAdapter(this, reviews);
+
         movieDetailsBinding.movieTrailerView.setAdapter(mAdapter);
+        movieDetailsBinding.movieReviewView.setAdapter(mReviewsAdapter);
 
         // Get the calling itent passed over
         Intent movieDetailsIntent = getIntent();
@@ -70,6 +82,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements ListItemC
         trailers.clear();
         trailers.addAll(movie.getTrailers());
         mAdapter.setData(trailers);              // reset the data set for the adapter
+
+        reviews.clear();
+        reviews.addAll(movie.getReviews());
+        mReviewsAdapter.setData(reviews);
 
         //  Testing the reviews
 //        String TAG = "REVIEW";
