@@ -19,8 +19,8 @@ public class TrailerViewHolder extends RecyclerView.ViewHolder implements View.O
 
 // The custom view holder outer class, used for assigning data to views
 
-    public ImageView ImageView;                       // location for the view we want to change
-    public TextView description;
+    private ImageView ImageView;                       // location for the view we want to change
+    private TextView description;
     private ListItemClickListener mOnClickListener;         // store location for list click listener
 
     public TrailerViewHolder(View itemView, ListItemClickListener mOnClickListener) {
@@ -37,7 +37,6 @@ public class TrailerViewHolder extends RecyclerView.ViewHolder implements View.O
     }
 
     public void bind(Context context, TrailerItem trailerItem) {
-
         PicassoImageHelper.loadImage( context, trailerItem.getYoutubeThumbnailURL(), ImageView);
         description.setText(trailerItem.getDescription());
     }

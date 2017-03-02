@@ -97,7 +97,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/trailerHeader"
                 android:paddingTop="10dp"
-                android:layout_marginBottom="5dp">
+                android:layout_marginBottom="5dp"
+                android:nestedScrollingEnabled="false">
             </android.support.v7.widget.RecyclerView>
 
             <TextView
@@ -116,7 +117,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/reviewsHeader"
-                android:paddingTop="5dp">
+                android:paddingTop="5dp"
+                android:nestedScrollingEnabled="false">
             </android.support.v7.widget.RecyclerView>
             </RelativeLayout>
          </ScrollView>

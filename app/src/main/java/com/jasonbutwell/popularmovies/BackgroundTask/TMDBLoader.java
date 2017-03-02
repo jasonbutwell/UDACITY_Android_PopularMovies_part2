@@ -28,7 +28,6 @@ public class TMDBLoader implements LoaderManager.LoaderCallbacks<ArrayList<Movie
     private Context mContext;
     private Object mBinding;
     private MovieTaskCompleteListener mListener;
-
     private static boolean isLoaded;
 
     public TMDBLoader(Context context, LoaderManager loaderManager, Object binding, MovieTaskCompleteListener listener) {

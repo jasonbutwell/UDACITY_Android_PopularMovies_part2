@@ -3,7 +3,6 @@ package com.jasonbutwell.popularmovies.Adapter;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.jasonbutwell.popularmovies.AdapterViewHolder.MoviePosterViewHolder;
@@ -39,13 +38,9 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MoviePosterVi
     // Note we can tweak this to show different layouts for different types of items if we want
     @Override
     public MoviePosterViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        boolean shouldAttachToParentImmediately = false;
-
         // Inflate a view from our custom layout list_item.xml
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.listview_item_image, viewGroup, shouldAttachToParentImmediately);
-
         // return a new CustomViewHolder for that View
-        return new MoviePosterViewHolder(view, mOnClickListener);
+        return new MoviePosterViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.listview_item_image, viewGroup, false), mOnClickListener);
     }
 
     // Calls our view holder with the position of the item to show

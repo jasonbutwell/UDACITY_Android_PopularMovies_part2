@@ -8,6 +8,8 @@ import com.jasonbutwell.popularmovies.Listener.ListItemClickListener;
 import com.jasonbutwell.popularmovies.Model.ReviewItem;
 import com.jasonbutwell.popularmovies.R;
 
+import java.util.Locale;
+
 /**
  * Created by J on 28/02/2017.
  */
@@ -16,10 +18,7 @@ public class ReviewViewHolder  extends RecyclerView.ViewHolder {
 
 // The custom view holder outer class, used for assigning data to views
 
-    public android.widget.ImageView ImageView;                       // location for the view we want to change
-    public TextView reviewID;
-    public TextView author;
-    public TextView review;
+    private TextView reviewID, author, review;
 
     private ListItemClickListener mOnClickListener;         // store location for list click listener
 
@@ -31,7 +30,8 @@ public class ReviewViewHolder  extends RecyclerView.ViewHolder {
     }
 
     public void bind(ReviewItem reviewItem) {
-        reviewID.setText("#"+String.valueOf(getAdapterPosition()+1));
+        String reviewId = String.format(Locale.ENGLISH,"#%d",getAdapterPosition()+1);
+        reviewID.setText(reviewId);
         author.setText(reviewItem.getAuthor());
         review.setText(reviewItem.getReview());
     }

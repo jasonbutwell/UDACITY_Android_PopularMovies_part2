@@ -1,6 +1,5 @@
 package com.jasonbutwell.popularmovies.Activity;
 
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -35,6 +34,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements ListItemC
 
     private ArrayList<TrailerItem> trailers = new ArrayList<>();
     private ArrayList<ReviewItem> reviews = new ArrayList<>();
+    private MovieItemBasic mMovie = new MovieItemBasic();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,22 +43,24 @@ public class MovieDetailsActivity extends AppCompatActivity implements ListItemC
         // Set up our <layout> enclosed layout with the data binding
         movieDetailsBinding = DataBindingUtil.setContentView(this, R.layout.activity_movie_details);
 
+        // Set Layout Manager for Movie Trailers
         movieDetailsBinding.movieTrailerView.setLayoutManager(new GridLayoutManager(this, TMDBInfo.NO_OF_TRAILERS_PER_ROW));
         movieDetailsBinding.movieTrailerView.setHasFixedSize(true);
 
+        // Set Layout Manager for movie Reviews
         movieDetailsBinding.movieReviewView.setLayoutManager(new LinearLayoutManager(this));
         movieDetailsBinding.movieReviewView.setHasFixedSize(true);
 
+        // Set adapter for Trailers
         mAdapter = new TrailerRecyclerViewAdapter(this, trailers, this);
-        mReviewsAdapter = new ReviewRecyclerViewAdapter(this, reviews);
-
         movieDetailsBinding.movieTrailerView.setAdapter(mAdapter);
+
+        // Set adapter for Reviews
+        mReviewsAdapter = new ReviewRecyclerViewAdapter(reviews);
         movieDetailsBinding.movieReviewView.setAdapter(mReviewsAdapter);
 
-        // Get the calling itent passed over
-        Intent movieDetailsIntent = getIntent();
-
-        MovieItemBasic mMovie = MovieDetail.generateFromIntent(movieDetailsIntent);
+        // Get the calling intent passed over
+        mMovie = MovieDetail.generateFromIntent( getIntent() );
 
         if ( !NetworkUtils.isNetworkAvailable(getApplicationContext()))
             Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.network_error_message), Toast.LENGTH_LONG).show();
@@ -79,22 +81,17 @@ public class MovieDetailsActivity extends AppCompatActivity implements ListItemC
 
     @Override
     public void onTaskComplete(MovieItem movie) {
+        // Set the data for the trailers adapter
         trailers.clear();
         trailers.addAll(movie.getTrailers());
         mAdapter.setData(trailers);              // reset the data set for the adapter
 
+        // Set the data for the reviews adapter
         reviews.clear();
         reviews.addAll(movie.getReviews());
         mReviewsAdapter.setData(reviews);
 
-        //  Testing the reviews
-//        String TAG = "REVIEW";
-//        for (int i =0; i < movie.getReviewsSize(); i++) {
-//            ReviewItem review = movie.getReviews().get(i);
-//            Log.i(TAG+":ID", review.getId());
-//            Log.i(TAG+":AUTHOR", review.getAuthor());
-//            Log.i(TAG+":REVIEW", review.getReview());
-//            Log.i(TAG+":URL", review.getUrl());
-//        }
+//        Log.i("MOVIE",String.valueOf(mMovie.getIntId()));
+//        Log.i("MOVIE TITLE",String.valueOf(mMovie.getOriginalTitle()));
     }
 }

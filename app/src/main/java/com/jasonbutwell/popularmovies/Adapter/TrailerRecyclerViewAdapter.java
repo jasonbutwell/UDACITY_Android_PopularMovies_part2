@@ -3,7 +3,6 @@ package com.jasonbutwell.popularmovies.Adapter;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.jasonbutwell.popularmovies.AdapterViewHolder.TrailerViewHolder;
@@ -43,13 +42,9 @@ public class TrailerRecyclerViewAdapter extends RecyclerView.Adapter<TrailerView
     // Note we can tweak this to show different layouts for different types of items if we want
     @Override
     public TrailerViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        boolean shouldAttachToParentImmediately = false;
-
         // Inflate a view from our custom layout list_item.xml
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.trailers_list_item, viewGroup, shouldAttachToParentImmediately);
-
         // return a new CustomViewHolder for that View
-        return new TrailerViewHolder(view, mOnClickListener);
+        return new TrailerViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.trailers_list_item, viewGroup, false), mOnClickListener);
     }
 
     // Calls our view holder with the position of the item to show

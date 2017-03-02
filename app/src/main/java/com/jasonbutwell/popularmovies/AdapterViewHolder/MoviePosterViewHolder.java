@@ -20,7 +20,7 @@ public class MoviePosterViewHolder extends RecyclerView.ViewHolder implements Vi
 
 // The custom view holder outer class, used for assigning data to views
 
-    public final ImageView posterImageView;                      // location for the view we want to change
+    private final ImageView posterImageView;                      // location for the view we want to change
     private final ListItemClickListener mOnClickListener;     // store location for list click listener
 
     public MoviePosterViewHolder(View itemView, ListItemClickListener mOnClickListener) {
@@ -36,7 +36,6 @@ public class MoviePosterViewHolder extends RecyclerView.ViewHolder implements Vi
     }
 
     public void bind(Context context, ArrayList<MovieItemBasic> movies, int position) {
-
         PicassoImageHelper.loadImage( context, movies.get(position).getPosterURL(), posterImageView);
     }
 

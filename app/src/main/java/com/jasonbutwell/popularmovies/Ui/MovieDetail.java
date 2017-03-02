@@ -27,8 +27,9 @@ public class MovieDetail {
         Intent movieDetailsIntent = new Intent( context, MovieDetailsActivity.class );
         movieDetailsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        // Just store the id and poster in the intent for now
+        // Just store the id, poster, title in the intent for now
         movieDetailsIntent.putExtra( TMDBInfo.MOVIE_ID, movieItem.getId());
+        movieDetailsIntent.putExtra( TMDBInfo.MOVIE_TITLE, movieItem.getOriginalTitle());
         movieDetailsIntent.putExtra( TMDBInfo.MOVIE_POSTER, movieItem.getPosterURL() );
         context.startActivity(movieDetailsIntent);
     }
