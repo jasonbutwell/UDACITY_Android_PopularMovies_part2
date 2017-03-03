@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.jasonbutwell.popularmovies.Adapter.FavMovieCursorAdapter;
 import com.jasonbutwell.popularmovies.Adapter.MovieRecyclerViewAdapter;
 import com.jasonbutwell.popularmovies.Api.TMDBHelper;
 import com.jasonbutwell.popularmovies.Api.TMDBInfo;
@@ -30,6 +31,8 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
     private MovieRecyclerViewAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
+    private FavMovieCursorAdapter mFavAdapter;
+
     // This is where we will store our movies
     private ArrayList<MovieItemBasic> movies = new ArrayList<>();
 
@@ -39,13 +42,16 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
 
         binding = DataBindingUtil.setContentView(this, R.layout.movie_poster_layout);
 
-        layoutManager = new GridLayoutManager(this,TMDBInfo.NO_OF_POSTERS_PER_ROW);
+        layoutManager = new GridLayoutManager(this, TMDBInfo.NO_OF_POSTERS_PER_ROW);
 
         binding.moviePosterView.setLayoutManager(layoutManager);
         binding.moviePosterView.setHasFixedSize(true);
 
         mAdapter = new MovieRecyclerViewAdapter(this, movies, this);
         binding.moviePosterView.setAdapter(mAdapter);
+
+        // Cursor Adapter for favourite movies
+        mFavAdapter = new FavMovieCursorAdapter(this, this);
 
         // Load popular as default initially - (To be replaced by sharedPreferences)
         loadMovies(TMDBInfo.POPULAR);
