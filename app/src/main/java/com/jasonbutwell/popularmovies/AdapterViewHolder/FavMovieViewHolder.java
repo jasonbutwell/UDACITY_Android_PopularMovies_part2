@@ -13,14 +13,14 @@ import com.jasonbutwell.popularmovies.R;
  * Created by J on 03/03/2017.
  */
 
-public class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+public class FavMovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
 // The custom view holder outer class, used for assigning data to views
 
     private final ImageView posterImageView;                      // location for the view we want to change
     private final ListItemClickListener mOnClickListener;     // store location for list click listener
 
-    public MovieViewHolder(View itemView, ListItemClickListener mOnClickListener) {
+    public FavMovieViewHolder(View itemView, ListItemClickListener mOnClickListener) {
         super(itemView);
 
         // Get a reference to the view to change

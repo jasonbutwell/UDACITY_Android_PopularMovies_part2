@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.jasonbutwell.popularmovies.Adapter.ReviewRecyclerViewAdapter;
@@ -75,6 +77,25 @@ public class MovieDetailsActivity extends AppCompatActivity implements ListItemC
     @Override
     public void onListItemClick(int clickedItemIndex) {
         MovieDetail.launchYouTubeIntent(this, trailers.get(clickedItemIndex) );
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.favourites_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        // If action was the favourite star
+        if ( id == R.id.action_favourite ) {
+            Toast.makeText(this, "You clicked the favourite star icon!",Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     // Callback method for When our AsyncTaskLoader completes

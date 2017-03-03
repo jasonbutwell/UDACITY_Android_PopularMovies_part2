@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <array name="pref_sortby_option_labels">
+        <item>@string/pref_sortby_option_label_latest</item>
+        <item>@string/pref_sortby_option_label_toprated</item>
+        <item>@string/pref_sortby_option_label_favourites</item>
+    </array>
+
+    <array name="pref_sortby_option_values">
+        <item>@string/pref_sortby_option_value_latest</item>
+        <item>@string/pref_sortby_option_value_toprated</item>
+        <item>@string/pref_sortby_option_value_favourites</item>
+    </array>
+
+</resources>

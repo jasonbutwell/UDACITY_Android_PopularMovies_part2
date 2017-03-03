@@ -6,7 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.jasonbutwell.popularmovies.AdapterViewHolder.MovieViewHolder;
+import com.jasonbutwell.popularmovies.AdapterViewHolder.FavMovieViewHolder;
 import com.jasonbutwell.popularmovies.Database.MovieContract;
 import com.jasonbutwell.popularmovies.Listener.ListItemClickListener;
 import com.jasonbutwell.popularmovies.R;
@@ -17,7 +17,7 @@ import com.jasonbutwell.popularmovies.R;
  * Created by J on 03/03/2017.
  */
 
-public class FavMovieCursorAdapter extends RecyclerView.Adapter<MovieViewHolder> {
+public class FavMovieCursorAdapter extends RecyclerView.Adapter<FavMovieViewHolder> {
 
     private Cursor mCursor;
     private Context mContext;
@@ -30,12 +30,12 @@ public class FavMovieCursorAdapter extends RecyclerView.Adapter<MovieViewHolder>
     }
 
     @Override
-    public MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new MovieViewHolder(LayoutInflater.from(mContext).inflate(R.layout.listview_item_image, parent, false), mOnClickListener);
+    public FavMovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new FavMovieViewHolder(LayoutInflater.from(mContext).inflate(R.layout.listview_item_image, parent, false), mOnClickListener);
     }
 
     @Override
-    public void onBindViewHolder(MovieViewHolder holder, int position) {
+    public void onBindViewHolder(FavMovieViewHolder holder, int position) {
 
         // Obtain indexes for the fields to extract from the Cursor
         int movieIdIndex = mCursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_MOVIE_ID);
