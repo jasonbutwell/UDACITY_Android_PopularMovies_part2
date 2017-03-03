@@ -70,7 +70,7 @@ import static com.jasonbutwell.popularmovies.Api.TMDBInfo.queryFilters;
             LoadingIndicator.showError(binding, true, errorMessage );           // if no network connection,
         }                                                                       // show the error message and retry button
         else {
-            LoadingIndicator.showError(binding, false, "");                              // clear and hide the error message
+            LoadingIndicator.showError(binding, false, "");                     // clear and hide the error message
 
             TMDBHelper.setSortByText(sortByParam);                              // set to sort by selected parameter
             //new TMDBQueryTask(listener,binding).execute(TMDBHelper.buildBaseURL());     // create new query to download

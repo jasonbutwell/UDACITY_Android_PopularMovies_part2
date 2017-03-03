@@ -26,6 +26,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activity.MainActivity" />
         </activity>
+
+        <provider
+            android:name="com.jasonbutwell.popularmovies.Database.MovieContentProvider"
+            android:authorities="com.jasonbutwell.popularmovies"
+            android:exported="false"/>
+
     </application>
 
 </manifest>

@@ -11,9 +11,13 @@ import android.support.annotation.Nullable;
  */
 
 public class MovieContentProvider extends ContentProvider {
+
+    private MovieDBHelper mDbHelper;
+
     @Override
     public boolean onCreate() {
-        return false;
+        mDbHelper = new MovieDBHelper( getContext() );      // create and store new MovieDBHelper
+        return true;                                        // return true
     }
 
     @Nullable
