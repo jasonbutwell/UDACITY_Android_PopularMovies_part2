@@ -8,8 +8,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 
-import org.jetbrains.annotations.NotNull;
-
 import static com.jasonbutwell.popularmovies.Database.MovieContract.MovieEntry.TABLE_NAME;
 
 /**
@@ -51,7 +49,7 @@ public class MovieContentProvider extends ContentProvider {
     }
 
     @Override
-    public Cursor query(@NotNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         final SQLiteDatabase db = mMovieDbHelper.getReadableDatabase();
         Cursor returnCursor;
 
@@ -91,7 +89,7 @@ public class MovieContentProvider extends ContentProvider {
     }
 
     @Override
-    public Uri insert(@NotNull Uri uri, ContentValues contentValues) {
+    public Uri insert(Uri uri, ContentValues contentValues) {
         final SQLiteDatabase db = mMovieDbHelper.getWritableDatabase();
         Uri returnUri;
         long id;
@@ -116,7 +114,7 @@ public class MovieContentProvider extends ContentProvider {
     }
 
     @Override
-    public int delete(@NotNull Uri uri, String selection, String[] selectionArgs) {
+    public int delete(Uri uri, String selection, String[] selectionArgs) {
         final SQLiteDatabase db = mMovieDbHelper.getWritableDatabase();
         int moviesDeleted = 0;
 
@@ -141,7 +139,7 @@ public class MovieContentProvider extends ContentProvider {
     }
 
     @Override
-    public int update(@NotNull Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
+    public int update(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
         final SQLiteDatabase db = mMovieDbHelper.getWritableDatabase();
         int moviesUpdated;
 
@@ -163,7 +161,7 @@ public class MovieContentProvider extends ContentProvider {
     }
 
     @Override
-    public String getType(@NotNull Uri uri) {
+    public String getType(Uri uri) {
         String returnType;
 
         switch ( sUriMatcher.match(uri) ) {
