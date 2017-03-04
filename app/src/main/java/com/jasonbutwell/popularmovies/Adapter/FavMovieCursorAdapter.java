@@ -58,6 +58,10 @@ public class FavMovieCursorAdapter extends RecyclerView.Adapter<FavMovieViewHold
         return mCursor != null ? mCursor.getCount() : 0;    // returns 0 if cursor is null or the count if not
     }
 
+    public Cursor getCursor() {
+        return mCursor;
+    }
+
     public Cursor swapCursor(Cursor cursor) {
         if (mCursor == cursor)                      // Check to see if the same cursor
             return null;                            // Nothing has changed

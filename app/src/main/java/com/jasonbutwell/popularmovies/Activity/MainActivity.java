@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.GridLayoutManager;
@@ -33,6 +34,11 @@ import static com.jasonbutwell.popularmovies.Api.TMDBInfo.FIELD_SEPERATOR;
 public class MainActivity extends AppCompatActivity implements ListItemClickListener, MovieTaskCompleteListener, CursorLoadCompleteListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     // IMPORTANT! - Replace API KEY in 'Api / APIKey.java' with your own 'TMDB API KEY'
+    private String LIST_STATE_KEY = "saved_layout_manager";
+    private String LIST_STATE_MOVIES = "movies_data";
+    private String LIST_STATE_CURSOR = "movies_cursor";
+
+    private Parcelable mListState;
 
     // Enable binding so we can access UI view components easier
     private MoviePosterLayoutBinding binding;
@@ -51,6 +57,11 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if ( savedInstanceState != null) {
+            mListState = savedInstanceState.getParcelable(LIST_STATE_KEY);
+            movies = savedInstanceState.getParcelableArrayList(LIST_STATE_MOVIES);
+        }
+
         binding = DataBindingUtil.setContentView(this, R.layout.movie_poster_layout);
 
         layoutManager = new GridLayoutManager(this, TMDBInfo.NO_OF_POSTERS_PER_ROW);
@@ -65,6 +76,28 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
         mFavAdapter = new FavMovieCursorAdapter(this, this);
 
         setUpPreferences();
+
+        if ( savedInstanceState == null)
+            loadMovies();
+    }
+    
+    @Override
+    public void onSaveInstanceState(Bundle state) {
+        super.onSaveInstanceState(state);
+
+        mListState = layoutManager.onSaveInstanceState();
+        state.putParcelable(LIST_STATE_KEY, mListState);
+        state.putParcelableArrayList(LIST_STATE_MOVIES, movies);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle state) {
+        super.onRestoreInstanceState(state);
+
+        if(state != null) {
+            mListState = state.getParcelable(LIST_STATE_KEY);
+            movies = state.getParcelableArrayList(LIST_STATE_MOVIES);
+        }
     }
 
     private void setUpPreferences() {
@@ -74,9 +107,6 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
 
         // set the filter preference from the prefs
         setFilter();
-
-        // Load popular as default initially - (To be replaced by sharedPreferences)
-        loadMovies();
     }
 
     @Override
@@ -86,6 +116,9 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
         // Reload movies again if we navigate back and favourites is set
         if ( sortFilter.equals(TMDBInfo.MOVIE_FILTER_FAVOURITES))
             loadMovies();
+
+        if (mListState != null)
+          layoutManager.onRestoreInstanceState(mListState);
     }
 
     @Override
@@ -95,16 +128,6 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
         // Unregister shared preference change listener
         PreferenceManager.getDefaultSharedPreferences(this)
                 .unregisterOnSharedPreferenceChangeListener(this);
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle state) {
-        super.onSaveInstanceState(state);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle state) {
-        super.onRestoreInstanceState(state);
     }
 
     // Create our options menu so we can filter movies by (1.Popular, 2.Top rated)

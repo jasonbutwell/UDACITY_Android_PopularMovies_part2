@@ -1,5 +1,7 @@
 package com.jasonbutwell.popularmovies.Model;
 
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 
 /**
@@ -8,7 +10,7 @@ import java.util.ArrayList;
 
 // Will be used to store specific information on each movie
 
-public class MovieItem extends MovieItemBasic {
+public class MovieItem extends MovieItemBasic implements Parcelable {
 
     private String plotSynopsis;
     private String userRating;
