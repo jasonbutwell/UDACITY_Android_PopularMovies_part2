@@ -1,10 +1,8 @@
 package com.jasonbutwell.popularmovies.Activity;
 
-import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -19,7 +17,6 @@ import com.jasonbutwell.popularmovies.Adapter.TrailerRecyclerViewAdapter;
 import com.jasonbutwell.popularmovies.Api.TMDBInfo;
 import com.jasonbutwell.popularmovies.BackgroundTask.TMDBDetailsLoader;
 import com.jasonbutwell.popularmovies.BackgroundTask.TMDBMovieCursorLoader;
-import com.jasonbutwell.popularmovies.Database.MovieContract;
 import com.jasonbutwell.popularmovies.Listener.CursorLoadCompleteListener;
 import com.jasonbutwell.popularmovies.Listener.ListItemClickListener;
 import com.jasonbutwell.popularmovies.Listener.MovieDetailTaskCompleteListener;
@@ -34,7 +31,7 @@ import com.jasonbutwell.popularmovies.databinding.ActivityMovieDetailsBinding;
 
 import java.util.ArrayList;
 
-public class MovieDetailsActivity extends AppCompatActivity implements ListItemClickListener,MovieDetailTaskCompleteListener,CursorLoadCompleteListener {
+public class MovieDetailsActivity extends AppCompatActivity implements ListItemClickListener, MovieDetailTaskCompleteListener, CursorLoadCompleteListener {
 
     // Use data binding to reduce boilerplate code
     public ActivityMovieDetailsBinding movieDetailsBinding;
@@ -109,52 +106,27 @@ public class MovieDetailsActivity extends AppCompatActivity implements ListItemC
     }
 
     // Callback method for when our AsyncTaskLoader completes
-
     @Override
     public void onTaskComplete(MovieItem movie) {
         // Set the data for the trailers adapter
         trailers.clear();
         trailers.addAll(movie.getTrailers());
-        mAdapter.setData(trailers);              // reset the data set for the adapter
+        mAdapter.setData(movie.getTrailers());              // reset the data set for the adapter
 
         // Set the data for the reviews adapter
         reviews.clear();
         reviews.addAll(movie.getReviews());
-        mReviewsAdapter.setData(reviews);
+        mReviewsAdapter.setData(movie.getReviews());
     }
 
+    // Check the record exists already
     public void checkFavouriteExists() {
-        // check record exists already
         new TMDBMovieCursorLoader(getApplicationContext(),getSupportLoaderManager(),movieDetailsBinding, this, mMovie.getIntId());
     }
 
+    // Used to check whether we are inserting the record or deleting an existing one
     @Override
     public void onTaskComplete(Cursor cursor) {
-
-        String movieId = mMovie.getId();                    // get Movie ID
-        String movieTitle = mMovie.getOriginalTitle();      // get Movie Title
-        String moviePoster = mMovie.getPosterURL();         // get Movie Poster URL
-        // Set up toast messages
-        String toastMessageAdd = "Added " + movieTitle + " to favourites";
-        String toastMessageDelete = "Removed " + movieTitle + " from favourites";
-
-        // checks the result of the check query and if not found inserts the movie into the favourites DB
-        if (cursor.getCount() == 0) {
-            // insert
-            ContentValues contentValues = new ContentValues();
-            contentValues.put( MovieContract.MovieEntry.COLUMN_MOVIE_ID, movieId );
-            contentValues.put( MovieContract.MovieEntry.COLUMN_MOVIE_TITLE,  movieTitle );
-            contentValues.put( MovieContract.MovieEntry.COLUMN_MOVIE_POSTER_URL, moviePoster );
-
-            if ( getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI, contentValues ) != null )
-                MovieDetail.showMessage(getApplicationContext(), toastMessageAdd, Toast.LENGTH_SHORT);
-
-        } else {
-            // delete
-            Uri uri = MovieContract.MovieEntry.CONTENT_URI.buildUpon().appendPath(String.valueOf(movieId)).build();
-
-            if (getContentResolver().delete(uri, null, null) == 1)
-                MovieDetail.showMessage(getApplicationContext(), toastMessageDelete, Toast.LENGTH_SHORT);
-        }
+        MovieDetail.insertOrDeleteFavourite( getApplicationContext(), mMovie, cursor.getCount() );
     }
 }

@@ -37,19 +37,6 @@ import static com.jasonbutwell.popularmovies.Api.TMDBInfo.YOUTUBE_THUMBNAIL;
     private static int page_number = 1;     // For expansion, for grabbing multiple pages later on
     private static String mFilter;
 
-    // Builds a movie item and returns it
-    public static MovieItem buildMovie(String id, String title, String posterURL, String synopsis, String rating, String release ) {
-        MovieItem movie = new MovieItem();
-        movie.setId(id);
-        movie.setOriginalTitle( title );
-        movie.setPosterURL( TMDBHelper.buildImageURL( posterURL ));
-        movie.setPlotSynopsis( synopsis );
-        movie.setUserRating( rating );
-        movie.setReleaseDate( release );
-
-        return movie;
-    }
-
     // Builds a basic movie obj
     public static MovieItemBasic buildMovie(String id, String title, String posterURL ) {
         MovieItem movie = new MovieItem();
@@ -72,10 +59,7 @@ import static com.jasonbutwell.popularmovies.Api.TMDBInfo.YOUTUBE_THUMBNAIL;
         else {
             LoadingIndicator.showError(binding, false, "");                     // clear and hide the error message
 
-            //TMDBHelper.setSortByText(sortByParam);                              // set to sort by selected parameter
-
             mFilter = sortByParam;
-            //new TMDBQueryTask(listener,binding).execute(TMDBHelper.buildBaseURL());     // create new query to download
             new TMDBLoader(context, loaderManager, binding, listener);
         }                                                                       // and extract the JSON data
     }
@@ -88,7 +72,7 @@ import static com.jasonbutwell.popularmovies.Api.TMDBInfo.YOUTUBE_THUMBNAIL;
                 .appendPath(id)
                 .appendQueryParameter(PARAM_API_KEY, APIKey.get());
         try {
-            url = new URL(buildUri.toString());
+                url = new URL(buildUri.toString());
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -145,7 +129,7 @@ import static com.jasonbutwell.popularmovies.Api.TMDBInfo.YOUTUBE_THUMBNAIL;
                 .appendQueryParameter(PARAM_YOUTUBE_VIEW, key);
 
         try {
-            youTubeURL = new URL(buildUri.toString()).toString();
+                youTubeURL = new URL(buildUri.toString()).toString();
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -168,7 +152,7 @@ import static com.jasonbutwell.popularmovies.Api.TMDBInfo.YOUTUBE_THUMBNAIL;
                 .appendQueryParameter(PARAM_API_KEY, APIKey.get());
 
         try {
-            url = new URL(buildUri.toString());
+                url = new URL(buildUri.toString());
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -198,7 +182,7 @@ import static com.jasonbutwell.popularmovies.Api.TMDBInfo.YOUTUBE_THUMBNAIL;
     }
 
     // Get the filter query component
-    static String getFilterQueryString() {
+    static String getSortByText() {
         return mFilter;
     }
 
@@ -207,9 +191,4 @@ import static com.jasonbutwell.popularmovies.Api.TMDBInfo.YOUTUBE_THUMBNAIL;
         mFilter = filter;
     }
 
-    // Get the sort query component as a string
-//    public static String getSortByText(int id) {
-//
-//        return (id < queryFilters.length ? queryFilters[id] : "");
-//    }
 }

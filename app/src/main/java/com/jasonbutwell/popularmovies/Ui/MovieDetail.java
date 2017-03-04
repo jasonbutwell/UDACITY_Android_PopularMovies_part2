@@ -1,5 +1,6 @@
 package com.jasonbutwell.popularmovies.Ui;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -9,6 +10,7 @@ import com.jasonbutwell.popularmovies.Activity.MovieDetailsActivity;
 import com.jasonbutwell.popularmovies.Api.PicassoImageHelper;
 import com.jasonbutwell.popularmovies.Api.TMDBHelper;
 import com.jasonbutwell.popularmovies.Api.TMDBInfo;
+import com.jasonbutwell.popularmovies.Database.MovieContract;
 import com.jasonbutwell.popularmovies.Model.MovieItem;
 import com.jasonbutwell.popularmovies.Model.MovieItemBasic;
 import com.jasonbutwell.popularmovies.Model.TrailerItem;
@@ -20,6 +22,43 @@ import com.jasonbutwell.popularmovies.databinding.ActivityMovieDetailsBinding;
  */
 
 public class MovieDetail {
+
+    // checks the result of the check query and if not found inserts the movie into the favourites DB
+    // Removes the record if it already exists
+
+    public static int insertOrDeleteFavourite( Context context, MovieItemBasic movie, int count ) {
+        int result = -1;
+
+        String movieId = movie.getId();                             // get Movie ID
+        String movieTitle = movie.getOriginalTitle();               // get Movie Title
+
+        if (count == 0) {
+            String moviePoster = movie.getPosterURL();         // get Movie Poster URL
+
+            ContentValues contentValues = new ContentValues();
+            contentValues.put( MovieContract.MovieEntry.COLUMN_MOVIE_ID, movieId );
+            contentValues.put( MovieContract.MovieEntry.COLUMN_MOVIE_TITLE,  movieTitle );
+            contentValues.put( MovieContract.MovieEntry.COLUMN_MOVIE_POSTER_URL, moviePoster );
+
+            // insert
+            if ( context.getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI, contentValues ) != null ) {
+                String toastMessageAdd = "Favoured " + movieTitle;
+                MovieDetail.showMessage(context, toastMessageAdd, Toast.LENGTH_SHORT);
+                result = 1;
+            }
+
+        } else {
+            Uri uri = MovieContract.MovieEntry.CONTENT_URI.buildUpon().appendPath(String.valueOf(movieId)).build();
+            // delete
+            if (context.getContentResolver().delete(uri, null, null) == 1) {
+                String toastMessageDelete = "Unfavoured " + movieTitle;
+                MovieDetail.showMessage(context, toastMessageDelete, Toast.LENGTH_SHORT);
+                result = 0;
+            }
+        }
+
+        return result;
+    }
 
     // Pass the selected movie's details to the intent to show that information to the user.
     public static void launchIntent(Context context, MovieItemBasic movieItem) {
