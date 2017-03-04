@@ -47,13 +47,19 @@ public class TMDBInfo {
     public static final String PARAM_PAGE = "page";
     public static final String PARAM_YOUTUBE_VIEW = "v";
 
+    // For Trailers and Reviews
     public static final String TRAILERS = "videos";
     public static final String REVIEWS = "reviews";
 
+    // Youtube Thumbnail default thumbnail filename
     public static final String YOUTUBE_THUMBNAIL = "0.jpg";
 
+    public static final String MOVIE_FILTER_POPULAR = "popular";
+    public static final String MOVIE_FILTER_TOP_RATED = "top_rated";
+    public static final String MOVIE_FILTER_FAVOURITES = "favourites";
+
     // Used for sorting
-    public static final int POPULAR = 0, TOP_RATED = 1;
-    public static final String[] queryFilters = { "popular", "top_rated" };
-    public static String filterQuery = queryFilters[POPULAR];
+    //public static final int POPULAR = 0, TOP_RATED = 1;
+    //public static final String[] queryFilters = { getApplicationContext, "top_rated" };
+    //public static String filterQuery = queryFilters[POPULAR];
 }

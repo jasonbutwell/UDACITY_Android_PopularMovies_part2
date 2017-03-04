@@ -11,7 +11,6 @@ import com.jasonbutwell.popularmovies.Model.MovieItemBasic;
 import com.jasonbutwell.popularmovies.Network.NetworkUtils;
 import com.jasonbutwell.popularmovies.R;
 import com.jasonbutwell.popularmovies.Ui.LoadingIndicator;
-import com.jasonbutwell.popularmovies.databinding.MoviePosterLayoutBinding;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -25,8 +24,8 @@ import static com.jasonbutwell.popularmovies.Api.TMDBInfo.REVIEWS;
 import static com.jasonbutwell.popularmovies.Api.TMDBInfo.TRAILERS;
 import static com.jasonbutwell.popularmovies.Api.TMDBInfo.YOUTUBE_BASE_URL;
 import static com.jasonbutwell.popularmovies.Api.TMDBInfo.YOUTUBE_THUMBNAIL;
-import static com.jasonbutwell.popularmovies.Api.TMDBInfo.filterQuery;
-import static com.jasonbutwell.popularmovies.Api.TMDBInfo.queryFilters;
+//import static com.jasonbutwell.popularmovies.Api.TMDBInfo.filterQuery;
+//import static com.jasonbutwell.popularmovies.Api.TMDBInfo.queryFilters;
 
 /**
  * Created by J on 21/01/2017.
@@ -36,6 +35,7 @@ import static com.jasonbutwell.popularmovies.Api.TMDBInfo.queryFilters;
     private TMDBHelper() {}                 // Private constructor
 
     private static int page_number = 1;     // For expansion, for grabbing multiple pages later on
+    private static String mFilter;
 
     // Builds a movie item and returns it
     public static MovieItem buildMovie(String id, String title, String posterURL, String synopsis, String rating, String release ) {
@@ -61,7 +61,7 @@ import static com.jasonbutwell.popularmovies.Api.TMDBInfo.queryFilters;
     }
 
     // Load initial movie info for posters
-    public static void loadMovieData(Context context, MovieTaskCompleteListener listener, int sortByParam, Object binding, LoaderManager loaderManager ) {
+    public static void loadMovieData(Context context, MovieTaskCompleteListener listener, String sortByParam, Object binding, LoaderManager loaderManager ) {
 
         String errorMessage = context.getString(R.string.network_error_message);
 
@@ -72,9 +72,11 @@ import static com.jasonbutwell.popularmovies.Api.TMDBInfo.queryFilters;
         else {
             LoadingIndicator.showError(binding, false, "");                     // clear and hide the error message
 
-            TMDBHelper.setSortByText(sortByParam);                              // set to sort by selected parameter
+            //TMDBHelper.setSortByText(sortByParam);                              // set to sort by selected parameter
+
+            mFilter = sortByParam;
             //new TMDBQueryTask(listener,binding).execute(TMDBHelper.buildBaseURL());     // create new query to download
-            new TMDBLoader(context, loaderManager, (MoviePosterLayoutBinding)binding, listener);
+            new TMDBLoader(context, loaderManager, binding, listener);
         }                                                                       // and extract the JSON data
     }
 
@@ -162,7 +164,7 @@ import static com.jasonbutwell.popularmovies.Api.TMDBInfo.queryFilters;
 
         Uri.Builder buildUri = Uri.parse(BASE_URL).buildUpon()
                 .appendQueryParameter(PARAM_PAGE, getPage_number_string())
-                .appendPath(filterQuery)
+                .appendPath(mFilter)
                 .appendQueryParameter(PARAM_API_KEY, APIKey.get());
 
         try {
@@ -197,17 +199,17 @@ import static com.jasonbutwell.popularmovies.Api.TMDBInfo.queryFilters;
 
     // Get the filter query component
     static String getFilterQueryString() {
-        return filterQuery;
+        return mFilter;
     }
 
     // Set filter query component
-    public static void setSortByText(int id) {
-        filterQuery = getSortByText(id);
+    public static void setSortByText(String filter) {
+        mFilter = filter;
     }
 
     // Get the sort query component as a string
-    public static String getSortByText(int id) {
-
-        return (id < queryFilters.length ? queryFilters[id] : "");
-    }
+//    public static String getSortByText(int id) {
+//
+//        return (id < queryFilters.length ? queryFilters[id] : "");
+//    }
 }

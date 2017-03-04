@@ -82,6 +82,8 @@ public class TMDBMovieCursorLoader implements LoaderManager.LoaderCallbacks<Curs
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        isLoaded = true;
+        LoadingIndicator.show(mBinding, false);
         mListener.onTaskComplete(data); // listener call back to return cursor so we can swap the cursor
     }
 

@@ -63,7 +63,7 @@ public class FavMovieCursorAdapter extends RecyclerView.Adapter<FavMovieViewHold
         mCursor = cursor;                           // new cursor value assigned
 
         if (cursor != null)
-            this.notifyDataSetChanged();            // check Cursor valid for update
+            notifyDataSetChanged();                 // check Cursor valid for update
 
         return tempCursor;                          // return the temp cursor
     }
