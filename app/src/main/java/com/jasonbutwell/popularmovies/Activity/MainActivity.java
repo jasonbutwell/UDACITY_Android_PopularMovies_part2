@@ -28,6 +28,8 @@ import com.jasonbutwell.popularmovies.databinding.MoviePosterLayoutBinding;
 
 import java.util.ArrayList;
 
+import static com.jasonbutwell.popularmovies.Api.TMDBInfo.FIELD_SEPERATOR;
+
 public class MainActivity extends AppCompatActivity implements ListItemClickListener, MovieTaskCompleteListener, CursorLoadCompleteListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     // IMPORTANT! - Replace API KEY in 'Api / APIKey.java' with your own 'TMDB API KEY'
@@ -62,10 +64,15 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
         // Cursor Adapter for favourite movies
         mFavAdapter = new FavMovieCursorAdapter(this, this);
 
+        setUpPreferences();
+    }
+
+    private void setUpPreferences() {
         // Obtain the SharedPreferences and register the listener
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
 
+        // set the filter preference from the prefs
         setFilter();
 
         // Load popular as default initially - (To be replaced by sharedPreferences)
@@ -73,10 +80,19 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Reload movies again if we navigate back and favourites is set
+        if ( sortFilter.equals(TMDBInfo.MOVIE_FILTER_FAVOURITES))
+            loadMovies();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
 
-        // Unregister listener
+        // Unregister shared preference change listener
         PreferenceManager.getDefaultSharedPreferences(this)
                 .unregisterOnSharedPreferenceChangeListener(this);
     }
@@ -98,30 +114,27 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
         return true;
     }
 
+    // Allows for settings activity to be called from menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
         // If action was the settings
-        if ( id == R.id.action_settings ) {
+        if ( item.getItemId() == R.id.action_settings ) {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
-
-        return super.onOptionsItemSelected(item);
+        else
+            return super.onOptionsItemSelected(item);
     }
 
     // Loads movies by sort order
     private void loadMovies() {
-
         movies.clear();
         mAdapter.setData(movies);       // clear what's in our movies and reset the adapter
 
         if ( !sortFilter.equals(TMDBInfo.MOVIE_FILTER_FAVOURITES))
             TMDBHelper.loadMovieData(getApplicationContext(), this, sortFilter, binding, getSupportLoaderManager() );
-        else {
+        else
             new TMDBMovieCursorLoader(getApplicationContext(), getSupportLoaderManager(), binding, this, -1);
-        }
         // Reset position of GridView
         //binding.moviePosterView.getLayoutManager().smoothScrollToPosition(binding.moviePosterView,null,0);
     }
@@ -129,10 +142,10 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
     // When a movie poster in the RecyclerView is clicked on
     @Override
     public void onListItemClick(int clickedItemIndex, View v) {
+        // Are we getting our data from favourites or one of the other two categories?
         if (sortFilter.equals(TMDBInfo.MOVIE_FILTER_FAVOURITES)) {
-            String str[] = v.getTag().toString().split("!.!");
-            MovieItemBasic movieItemBasic = new MovieItemBasic(str[0],str[1],str[2]);
-            MovieDetail.launchIntent( getApplicationContext(), movieItemBasic );
+            String movieFields[] = v.getTag().toString().split(FIELD_SEPERATOR);
+            MovieDetail.launchIntent( getApplicationContext(), new MovieItemBasic(movieFields[0],movieFields[1],movieFields[2]) );
         }
         else
             MovieDetail.launchIntent( getApplicationContext(), movies.get(clickedItemIndex) );
@@ -156,23 +169,24 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
 
     // Do not touch this as it's called from the XML layout
     public void onErrorReload( View view ) {
-        //loadMovies(TMDBInfo.POPULAR);
+        //loadMovies();
     }
 
     // gets a preference value based on its key
-//    public String getPreferenceValue( SharedPreferences sharedPreferences, String key, int defaultValue ) {
-//        return sharedPreferences.getString(key,getResources().getString(defaultValue));
-//    }
+    public String getPreferenceValue( SharedPreferences sharedPreferences, String key, int defaultValue ) {
+        return sharedPreferences.getString(key,getResources().getString(defaultValue));
+    }
 
+    // Set up the sort filter based on preference
     public void setFilter() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        sortFilter = sharedPreferences.getString(getString(R.string.pref_sortby_key),
-                getResources().getString(R.string.pref_sortby_option_value_popular));
+        sortFilter = getPreferenceValue(sharedPreferences, getString(R.string.pref_sortby_key), R.string.pref_sortby_option_value_popular);
     }
 
     // This callback method is called when the Preference is changed so we can act on it
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        // change the filter to reflect the preference and reload the movies
         setFilter();
         loadMovies();
     }

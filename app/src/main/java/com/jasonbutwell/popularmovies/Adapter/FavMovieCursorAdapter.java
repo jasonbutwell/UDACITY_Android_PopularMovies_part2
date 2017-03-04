@@ -11,6 +11,8 @@ import com.jasonbutwell.popularmovies.Database.MovieContract;
 import com.jasonbutwell.popularmovies.Listener.ListItemClickListener;
 import com.jasonbutwell.popularmovies.R;
 
+import static com.jasonbutwell.popularmovies.Api.TMDBInfo.FIELD_SEPERATOR;
+
 /**
  * Created by J on 03/03/2017.
  */
@@ -47,8 +49,8 @@ public class FavMovieCursorAdapter extends RecyclerView.Adapter<FavMovieViewHold
         String movieTitle = mCursor.getString(TitleIndex);  // extract poster url string
 
 
-        holder.itemView.setTag(id + "!.!" + movieTitle +"!.!" + posterURL);       // set the itemView tag to be the movie id
-        holder.bind(mContext, posterURL);                                         // Call ViewHolder to bind the posterURL
+        holder.itemView.setTag(id + FIELD_SEPERATOR + movieTitle + FIELD_SEPERATOR + posterURL);    // set the itemView tag to be the movie id
+        holder.bind(mContext, posterURL);                                                           // Call ViewHolder to bind the posterURL
     }
 
     @Override

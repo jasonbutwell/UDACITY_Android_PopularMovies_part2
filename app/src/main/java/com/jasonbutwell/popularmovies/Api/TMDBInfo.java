@@ -5,6 +5,7 @@ package com.jasonbutwell.popularmovies.Api;
 
 public class TMDBInfo {
 
+    // How many recyclerView items per row - defaults
     public static final int NO_OF_POSTERS_PER_ROW = 2;  // For the Recycler layout manager
     public static final int NO_OF_TRAILERS_PER_ROW = 3; // For the Recycler's grid layout
 
@@ -30,9 +31,10 @@ public class TMDBInfo {
     public static final String YOUTUBE_URI = "vnd.youtube://";
     public static final String YOUTUBE_PACKAGE_NAME = "com.google.android.youtube";
 
-//    public static final String MOVIE_BACKGROUND = "backdrop_path";
-//    public static final String MOVIE_ADULT = "adult";
-//    public static final String MOVIE_DURATION = "duration";
+    // Not used for now
+    // public static final String MOVIE_BACKGROUND = "backdrop_path";
+    // public static final String MOVIE_ADULT = "adult";
+    // public static final String MOVIE_DURATION = "duration";
 
     // For building the base URL and image URLs
     public static final String YOUTUBE_IMG_BASE_URL = "https://img.youtube.com/vi/";
@@ -42,7 +44,7 @@ public class TMDBInfo {
     public static final String IMAGE_SIZE = "w185";
 
     // various query parameters needed
-//    public static final String PARAM_SORTBY = "sort_by";
+    // public static final String PARAM_SORTBY = "sort_by";
     public static final String PARAM_API_KEY = "api_key";
     public static final String PARAM_PAGE = "page";
     public static final String PARAM_YOUTUBE_VIEW = "v";
@@ -54,12 +56,11 @@ public class TMDBInfo {
     // Youtube Thumbnail default thumbnail filename
     public static final String YOUTUBE_THUMBNAIL = "0.jpg";
 
+    // Movie filter criteria
     public static final String MOVIE_FILTER_POPULAR = "popular";
     public static final String MOVIE_FILTER_TOP_RATED = "top_rated";
     public static final String MOVIE_FILTER_FAVOURITES = "favourites";
 
-    // Used for sorting
-    //public static final int POPULAR = 0, TOP_RATED = 1;
-    //public static final String[] queryFilters = { getApplicationContext, "top_rated" };
-    //public static String filterQuery = queryFilters[POPULAR];
+    // Used to break up the movie details string from the tag set in the adapter
+    public static final String FIELD_SEPERATOR = "<!SEP!>";
 }

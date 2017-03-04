@@ -47,11 +47,11 @@ public class TMDBMovieCursorLoader implements LoaderManager.LoaderCallbacks<Curs
 
             @Override
             protected void onStartLoading() {
-                //super.onStartLoading();
+                super.onStartLoading();
 
                 // Workaround to stop this re-running when we navigate back to the activity
                 if ( !isLoaded )
-                    LoadingIndicator.show(mBinding, true);
+                    LoadingIndicator.show(mBinding, true);  // loading indicator on
 
                     if (mMovieData != null)
                         deliverResult(mMovieData);      // Delivers any previously loaded data immediately
@@ -63,17 +63,21 @@ public class TMDBMovieCursorLoader implements LoaderManager.LoaderCallbacks<Curs
             @Override
             public Cursor loadInBackground() {
                 String selection = null;
-                String[] selectionArgs = null;
+                String[] selectionArgs = null;      // Initial selection (selects all records)
+
+                // Set up our selection to query by ID
                 if (mId != -1) {
                     selection = MovieContract.MovieEntry.COLUMN_MOVIE_ID + "=?";
                     selectionArgs = new String[]{String.valueOf(mId)};
                 }
                 try {
+                    // Run the query here
                     return mContext.getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI,
                             null,
                             selection,
                             selectionArgs,
                             MovieContract.MovieEntry.COLUMN_MOVIE_TITLE);   // sort results by title
+
                 }catch (Exception e ) {
                     e.printStackTrace();
                     return null;
@@ -90,9 +94,9 @@ public class TMDBMovieCursorLoader implements LoaderManager.LoaderCallbacks<Curs
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        isLoaded = true;
-        LoadingIndicator.show(mBinding, false);
-        mListener.onTaskComplete(data); // listener call back to return cursor so we can swap the cursor
+        isLoaded = true;                            // stop loading indicator running again
+        LoadingIndicator.show(mBinding, false);     // loading indicator on
+        mListener.onTaskComplete(data);             // call back to return cursor so we can swap the cursor
     }
 
     @Override

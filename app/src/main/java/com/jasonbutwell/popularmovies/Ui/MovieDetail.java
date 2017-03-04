@@ -23,7 +23,6 @@ public class MovieDetail {
 
     // Pass the selected movie's details to the intent to show that information to the user.
     public static void launchIntent(Context context, MovieItemBasic movieItem) {
-
         Intent movieDetailsIntent = new Intent( context, MovieDetailsActivity.class );
         movieDetailsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
@@ -40,7 +39,7 @@ public class MovieDetail {
     public static void launchYouTubeIntent(Context context, TrailerItem trailer ) {
         if ( context != null && trailer != null ) {
             // Display a message to say what trailer we are opening
-            Toast.makeText(context, "Opening " + trailer.getDescription(), Toast.LENGTH_SHORT).show();
+            showMessage(context, "Opening " + trailer.getDescription(), Toast.LENGTH_SHORT);
 
             // If the youTube Intent is not null then the package was found, so we can open the YouTube app
             if ( checkPackageInstalled(context, TMDBInfo.YOUTUBE_PACKAGE_NAME) )
@@ -70,17 +69,14 @@ public class MovieDetail {
 
     // Generate a MovieItem object based on information pulled from the Intent
     public static MovieItemBasic generateFromIntent(Intent movieIntent) {
-
-        String id="", movieTitle="", moviePoster="";
-
         // Obtain the data passed with the intent as extras
-        if (movieIntent != null) {
-            id = movieIntent.getStringExtra(TMDBInfo.MOVIE_ID);
-            movieTitle = movieIntent.getStringExtra(TMDBInfo.MOVIE_TITLE);
-            moviePoster = movieIntent.getStringExtra(TMDBInfo.MOVIE_POSTER);
-        }
-
-        return new MovieItemBasic(id, movieTitle, moviePoster);
+        if (movieIntent != null)
+            return new MovieItemBasic(
+                    movieIntent.getStringExtra(TMDBInfo.MOVIE_ID),
+                    movieIntent.getStringExtra(TMDBInfo.MOVIE_TITLE),
+                    movieIntent.getStringExtra(TMDBInfo.MOVIE_POSTER)
+            );
+            else return null;
     }
 
     // Updates the UI with movie Item details
@@ -95,5 +91,10 @@ public class MovieDetail {
         binding.movieRating.setText(movieItem.getUserRatingOutOfTen());                                 // show the rating
         binding.movieReleaseDate.setText( DateTimeUtils.USDateToUKDate(movieItem.getReleaseDate()) );   // show the release date (reformatted)
         binding.movieDuration.setText( DateTimeUtils.convertToHoursMins( movieItem.getRunTime() ) );
+    }
+
+    // Displays a simple Toast message
+    public static void showMessage(Context context, String message, int duration) {
+        Toast.makeText(context, message, duration).show();
     }
 }

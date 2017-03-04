@@ -1,6 +1,7 @@
 package com.jasonbutwell.popularmovies.Activity;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
@@ -79,8 +80,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements ListItemC
         }
     }
 
-    // Open Trailer via Intent
-
+    // Open YouTube Trailer via Intent
     @Override
     public void onListItemClick(int clickedItemIndex, View view) {
         MovieDetail.launchYouTubeIntent(this, trailers.get(clickedItemIndex) );
@@ -94,17 +94,21 @@ public class MovieDetailsActivity extends AppCompatActivity implements ListItemC
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
+        switch (item.getItemId()) {
+            case R.id.action_favourite:
+                checkFavouriteExists();
+                return true;
 
-        // If action was the favourite star
-        if ( id == R.id.action_favourite ) {
-            checkFavouriteExists();
-            return true;
+            case R.id.action_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
-    // Callback method for When our AsyncTaskLoader completes
+    // Callback method for when our AsyncTaskLoader completes
 
     @Override
     public void onTaskComplete(MovieItem movie) {
@@ -127,31 +131,30 @@ public class MovieDetailsActivity extends AppCompatActivity implements ListItemC
     @Override
     public void onTaskComplete(Cursor cursor) {
 
-        // gets the actual movie ID
-        String movieId = mMovie.getId();
-        String movieTitle = mMovie.getOriginalTitle();
+        String movieId = mMovie.getId();                    // get Movie ID
+        String movieTitle = mMovie.getOriginalTitle();      // get Movie Title
+        String moviePoster = mMovie.getPosterURL();         // get Movie Poster URL
+        // Set up toast messages
         String toastMessageAdd = "Added " + movieTitle + " to favourites";
         String toastMessageDelete = "Removed " + movieTitle + " from favourites";
 
         // checks the result of the check query and if not found inserts the movie into the favourites DB
-
         if (cursor.getCount() == 0) {
             // insert
             ContentValues contentValues = new ContentValues();
-            contentValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, movieId);
-            contentValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_TITLE, movieTitle);
-            contentValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_POSTER_URL, mMovie.getPosterURL());
+            contentValues.put( MovieContract.MovieEntry.COLUMN_MOVIE_ID, movieId );
+            contentValues.put( MovieContract.MovieEntry.COLUMN_MOVIE_TITLE,  movieTitle );
+            contentValues.put( MovieContract.MovieEntry.COLUMN_MOVIE_POSTER_URL, moviePoster );
 
-            Uri uri = getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI, contentValues);
-            if (uri != null)
-                Toast.makeText(getApplicationContext(), toastMessageAdd, Toast.LENGTH_SHORT).show();
+            if ( getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI, contentValues ) != null )
+                MovieDetail.showMessage(getApplicationContext(), toastMessageAdd, Toast.LENGTH_SHORT);
 
         } else {
             // delete
             Uri uri = MovieContract.MovieEntry.CONTENT_URI.buildUpon().appendPath(String.valueOf(movieId)).build();
 
             if (getContentResolver().delete(uri, null, null) == 1)
-                Toast.makeText(getApplicationContext(), toastMessageDelete, Toast.LENGTH_SHORT).show();
+                MovieDetail.showMessage(getApplicationContext(), toastMessageDelete, Toast.LENGTH_SHORT);
         }
     }
 }
