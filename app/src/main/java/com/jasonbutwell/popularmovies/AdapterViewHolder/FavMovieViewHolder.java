@@ -40,6 +40,6 @@ public class FavMovieViewHolder extends RecyclerView.ViewHolder implements View.
 
     @Override
     public void onClick(View view) {
-        mOnClickListener.onListItemClick(getAdapterPosition()); // passes the adapter position on
+        mOnClickListener.onListItemClick(getAdapterPosition(), view); // passes the adapter position on
     }
 }

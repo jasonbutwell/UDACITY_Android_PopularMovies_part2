@@ -43,6 +43,6 @@ public class MoviePosterViewHolder extends RecyclerView.ViewHolder implements Vi
 
     @Override
     public void onClick(View view) {
-        mOnClickListener.onListItemClick(getAdapterPosition()); // passes the adapter position on
+        mOnClickListener.onListItemClick(getAdapterPosition(), view ); // passes the adapter position on
     }
 }

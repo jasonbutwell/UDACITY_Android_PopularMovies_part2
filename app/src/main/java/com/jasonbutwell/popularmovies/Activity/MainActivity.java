@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
     private MovieRecyclerViewAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
-    private FavMovieCursorAdapter mFavAdapter;
+    public FavMovieCursorAdapter mFavAdapter;
 
     // This is where we will store our movies
     private ArrayList<MovieItemBasic> movies = new ArrayList<>();
@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
         if ( !sortFilter.equals(TMDBInfo.MOVIE_FILTER_FAVOURITES))
             TMDBHelper.loadMovieData(getApplicationContext(), this, sortFilter, binding, getSupportLoaderManager() );
         else {
-            new TMDBMovieCursorLoader(getApplicationContext(),getSupportLoaderManager(),binding, this, -1);
+            new TMDBMovieCursorLoader(getApplicationContext(), getSupportLoaderManager(), binding, this, -1);
         }
         // Reset position of GridView
         //binding.moviePosterView.getLayoutManager().smoothScrollToPosition(binding.moviePosterView,null,0);
@@ -128,8 +128,14 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
 
     // When a movie poster in the RecyclerView is clicked on
     @Override
-    public void onListItemClick(int clickedItemIndex) {
-        MovieDetail.launchIntent( getApplicationContext(), movies.get(clickedItemIndex) );
+    public void onListItemClick(int clickedItemIndex, View v) {
+        if (sortFilter.equals(TMDBInfo.MOVIE_FILTER_FAVOURITES)) {
+            String str[] = v.getTag().toString().split("!.!");
+            MovieItemBasic movieItemBasic = new MovieItemBasic(str[0],str[1],str[2]);
+            MovieDetail.launchIntent( getApplicationContext(), movieItemBasic );
+        }
+        else
+            MovieDetail.launchIntent( getApplicationContext(), movies.get(clickedItemIndex) );
     }
 
     // Callback for when the asyncTask completes

@@ -1,5 +1,7 @@
 package com.jasonbutwell.popularmovies.Listener;
 
+import android.view.View;
+
 /**
  * Created by J on 25/02/2017.
  */
@@ -8,5 +10,5 @@ package com.jasonbutwell.popularmovies.Listener;
 
 public interface ListItemClickListener {
     // The method we must implement
-    void onListItemClick(int clickedItemIndex);
+    void onListItemClick(int clickedItemIndex, View view);
 }

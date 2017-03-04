@@ -11,8 +11,6 @@ import com.jasonbutwell.popularmovies.Database.MovieContract;
 import com.jasonbutwell.popularmovies.Listener.ListItemClickListener;
 import com.jasonbutwell.popularmovies.R;
 
-;
-
 /**
  * Created by J on 03/03/2017.
  */
@@ -40,14 +38,17 @@ public class FavMovieCursorAdapter extends RecyclerView.Adapter<FavMovieViewHold
         // Obtain indexes for the fields to extract from the Cursor
         int movieIdIndex = mCursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_MOVIE_ID);
         int posterIndex = mCursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_MOVIE_POSTER_URL);
+        int TitleIndex = mCursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_MOVIE_TITLE);
 
         mCursor.moveToPosition(position);                   // get the location based on the view position
 
         final int id = mCursor.getInt(movieIdIndex);        // extract movie id
         String posterURL = mCursor.getString(posterIndex);  // extract poster url string
+        String movieTitle = mCursor.getString(TitleIndex);  // extract poster url string
 
-        holder.itemView.setTag(id);                         // set the itemView tag to be the movie id
-        holder.bind(mContext, posterURL);                   // Call ViewHolder to bind the posterURL
+
+        holder.itemView.setTag(id + "!.!" + movieTitle +"!.!" + posterURL);       // set the itemView tag to be the movie id
+        holder.bind(mContext, posterURL);                                         // Call ViewHolder to bind the posterURL
     }
 
     @Override
@@ -68,6 +69,3 @@ public class FavMovieCursorAdapter extends RecyclerView.Adapter<FavMovieViewHold
         return tempCursor;                          // return the temp cursor
     }
 }
-
-
-

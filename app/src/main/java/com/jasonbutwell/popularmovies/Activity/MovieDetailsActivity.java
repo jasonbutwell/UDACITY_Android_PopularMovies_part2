@@ -10,6 +10,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.jasonbutwell.popularmovies.Adapter.ReviewRecyclerViewAdapter;
@@ -81,7 +82,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements ListItemC
     // Open Trailer via Intent
 
     @Override
-    public void onListItemClick(int clickedItemIndex) {
+    public void onListItemClick(int clickedItemIndex, View view) {
         MovieDetail.launchYouTubeIntent(this, trailers.get(clickedItemIndex) );
     }
 
@@ -97,26 +98,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements ListItemC
 
         // If action was the favourite star
         if ( id == R.id.action_favourite ) {
-            //Toast.makeText(this, "You clicked the favourite star icon!",Toast.LENGTH_SHORT).show();
-
-            int mId = mMovie.getIntId();
-
-            // check record exists already
-            new TMDBMovieCursorLoader(getApplicationContext(),getSupportLoaderManager(),movieDetailsBinding, this, mId);
-
-//            ContentValues contentValues = new ContentValues();
-//            contentValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, mMovie.getId());
-//            contentValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_TITLE, mMovie.getOriginalTitle());
-//            contentValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_POSTER_URL, mMovie.getPosterURL());
-//
-//            Uri uri = getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI,contentValues);
-//
-//            if ( uri != null )
-//                Log.i("MOVIE:URI", uri.toString());
-
+            checkFavouriteExists();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -133,9 +117,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements ListItemC
         reviews.clear();
         reviews.addAll(movie.getReviews());
         mReviewsAdapter.setData(reviews);
+    }
 
-//        Log.i("MOVIE",String.valueOf(mMovie.getIntId()));
-//        Log.i("MOVIE TITLE",String.valueOf(mMovie.getOriginalTitle()));
+    public void checkFavouriteExists() {
+        // check record exists already
+        new TMDBMovieCursorLoader(getApplicationContext(),getSupportLoaderManager(),movieDetailsBinding, this, mMovie.getIntId());
     }
 
     @Override
@@ -143,26 +129,29 @@ public class MovieDetailsActivity extends AppCompatActivity implements ListItemC
 
         // gets the actual movie ID
         String movieId = mMovie.getId();
+        String movieTitle = mMovie.getOriginalTitle();
+        String toastMessageAdd = "Added " + movieTitle + " to favourites";
+        String toastMessageDelete = "Removed " + movieTitle + " from favourites";
 
         // checks the result of the check query and if not found inserts the movie into the favourites DB
 
-        if ( cursor.getCount() == 0 ) {
+        if (cursor.getCount() == 0) {
             // insert
             ContentValues contentValues = new ContentValues();
-            contentValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, mMovie.getId());
-            contentValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_TITLE, mMovie.getOriginalTitle());
+            contentValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, movieId);
+            contentValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_TITLE, movieTitle);
             contentValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_POSTER_URL, mMovie.getPosterURL());
 
-            Uri uri = getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI,contentValues);
-            if ( uri != null )
-                Toast.makeText(getApplicationContext(), "Added movie", Toast.LENGTH_SHORT).show();
-        }
-        else {
+            Uri uri = getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI, contentValues);
+            if (uri != null)
+                Toast.makeText(getApplicationContext(), toastMessageAdd, Toast.LENGTH_SHORT).show();
+
+        } else {
             // delete
             Uri uri = MovieContract.MovieEntry.CONTENT_URI.buildUpon().appendPath(String.valueOf(movieId)).build();
-            
-            if ( getContentResolver().delete(uri,null,null) == 1 )
-                Toast.makeText(getApplicationContext(), "Deleted movie", Toast.LENGTH_SHORT).show();
+
+            if (getContentResolver().delete(uri, null, null) == 1)
+                Toast.makeText(getApplicationContext(), toastMessageDelete, Toast.LENGTH_SHORT).show();
         }
     }
 }
