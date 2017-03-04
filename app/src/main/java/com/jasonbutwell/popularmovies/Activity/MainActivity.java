@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
         if ( !sortFilter.equals(TMDBInfo.MOVIE_FILTER_FAVOURITES))
             TMDBHelper.loadMovieData(getApplicationContext(), this, sortFilter, binding, getSupportLoaderManager() );
         else {
-            new TMDBMovieCursorLoader(getApplicationContext(),getSupportLoaderManager(),binding, this);
+            new TMDBMovieCursorLoader(getApplicationContext(),getSupportLoaderManager(),binding, this, -1);
         }
         // Reset position of GridView
         //binding.moviePosterView.getLayoutManager().smoothScrollToPosition(binding.moviePosterView,null,0);

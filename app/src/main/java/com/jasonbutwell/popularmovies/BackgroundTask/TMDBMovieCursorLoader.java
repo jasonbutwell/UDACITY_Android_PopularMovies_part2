@@ -23,11 +23,13 @@ public class TMDBMovieCursorLoader implements LoaderManager.LoaderCallbacks<Curs
     private Object mBinding;
     private CursorLoadCompleteListener mListener;
     private static boolean isLoaded;
+    private int mId = -1;
 
-    public TMDBMovieCursorLoader(Context context, LoaderManager loaderManager, Object binding, CursorLoadCompleteListener listener) {
+    public TMDBMovieCursorLoader(Context context, LoaderManager loaderManager, Object binding, CursorLoadCompleteListener listener, int id) {
         mContext = context;
         mBinding = binding;
         mListener = listener;
+        mId = id;
 
         isLoaded = false;
 
@@ -60,11 +62,17 @@ public class TMDBMovieCursorLoader implements LoaderManager.LoaderCallbacks<Curs
             // execute query to retrieve all records as selection and selection args are null
             @Override
             public Cursor loadInBackground() {
+                String selection = null;
+                String[] selectionArgs = null;
+                if (mId != -1) {
+                    selection = MovieContract.MovieEntry.COLUMN_MOVIE_ID + "=?";
+                    selectionArgs = new String[]{String.valueOf(mId)};
+                }
                 try {
                     return mContext.getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI,
                             null,
-                            null,
-                            null,
+                            selection,
+                            selectionArgs,
                             MovieContract.MovieEntry.COLUMN_MOVIE_TITLE);   // sort results by title
                 }catch (Exception e ) {
                     e.printStackTrace();

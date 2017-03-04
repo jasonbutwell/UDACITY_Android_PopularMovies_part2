@@ -1,12 +1,13 @@
 package com.jasonbutwell.popularmovies.Activity;
 
-import android.content.SharedPreferences;
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -15,6 +16,9 @@ import com.jasonbutwell.popularmovies.Adapter.ReviewRecyclerViewAdapter;
 import com.jasonbutwell.popularmovies.Adapter.TrailerRecyclerViewAdapter;
 import com.jasonbutwell.popularmovies.Api.TMDBInfo;
 import com.jasonbutwell.popularmovies.BackgroundTask.TMDBDetailsLoader;
+import com.jasonbutwell.popularmovies.BackgroundTask.TMDBMovieCursorLoader;
+import com.jasonbutwell.popularmovies.Database.MovieContract;
+import com.jasonbutwell.popularmovies.Listener.CursorLoadCompleteListener;
 import com.jasonbutwell.popularmovies.Listener.ListItemClickListener;
 import com.jasonbutwell.popularmovies.Listener.MovieDetailTaskCompleteListener;
 import com.jasonbutwell.popularmovies.Model.MovieItem;
@@ -28,7 +32,7 @@ import com.jasonbutwell.popularmovies.databinding.ActivityMovieDetailsBinding;
 
 import java.util.ArrayList;
 
-public class MovieDetailsActivity extends AppCompatActivity implements ListItemClickListener,MovieDetailTaskCompleteListener {
+public class MovieDetailsActivity extends AppCompatActivity implements ListItemClickListener,MovieDetailTaskCompleteListener,CursorLoadCompleteListener {
 
     // Use data binding to reduce boilerplate code
     public ActivityMovieDetailsBinding movieDetailsBinding;
@@ -93,7 +97,23 @@ public class MovieDetailsActivity extends AppCompatActivity implements ListItemC
 
         // If action was the favourite star
         if ( id == R.id.action_favourite ) {
-            Toast.makeText(this, "You clicked the favourite star icon!",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "You clicked the favourite star icon!",Toast.LENGTH_SHORT).show();
+
+            int mId = mMovie.getIntId();
+
+            // check record exists already
+            new TMDBMovieCursorLoader(getApplicationContext(),getSupportLoaderManager(),movieDetailsBinding, this, mId);
+
+//            ContentValues contentValues = new ContentValues();
+//            contentValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, mMovie.getId());
+//            contentValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_TITLE, mMovie.getOriginalTitle());
+//            contentValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_POSTER_URL, mMovie.getPosterURL());
+//
+//            Uri uri = getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI,contentValues);
+//
+//            if ( uri != null )
+//                Log.i("MOVIE:URI", uri.toString());
+
             return true;
         }
 
@@ -116,5 +136,33 @@ public class MovieDetailsActivity extends AppCompatActivity implements ListItemC
 
 //        Log.i("MOVIE",String.valueOf(mMovie.getIntId()));
 //        Log.i("MOVIE TITLE",String.valueOf(mMovie.getOriginalTitle()));
+    }
+
+    @Override
+    public void onTaskComplete(Cursor cursor) {
+
+        // gets the actual movie ID
+        String movieId = mMovie.getId();
+
+        // checks the result of the check query and if not found inserts the movie into the favourites DB
+
+        if ( cursor.getCount() == 0 ) {
+            // insert
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, mMovie.getId());
+            contentValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_TITLE, mMovie.getOriginalTitle());
+            contentValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_POSTER_URL, mMovie.getPosterURL());
+
+            Uri uri = getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI,contentValues);
+            if ( uri != null )
+                Toast.makeText(getApplicationContext(), "Added movie", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            // delete
+            Uri uri = MovieContract.MovieEntry.CONTENT_URI.buildUpon().appendPath(String.valueOf(movieId)).build();
+            
+            if ( getContentResolver().delete(uri,null,null) == 1 )
+                Toast.makeText(getApplicationContext(), "Deleted movie", Toast.LENGTH_SHORT).show();
+        }
     }
 }
