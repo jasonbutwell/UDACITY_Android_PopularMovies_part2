@@ -27,6 +27,7 @@ import com.jasonbutwell.popularmovies.Model.TrailerItem;
 import com.jasonbutwell.popularmovies.Network.NetworkUtils;
 import com.jasonbutwell.popularmovies.R;
 import com.jasonbutwell.popularmovies.Ui.MovieDetail;
+import com.jasonbutwell.popularmovies.Utils.SysUtil;
 import com.jasonbutwell.popularmovies.databinding.ActivityMovieDetailsBinding;
 
 import java.util.ArrayList;
@@ -41,7 +42,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements ListItemC
 
     private ArrayList<TrailerItem> trailers = new ArrayList<>();
     private ArrayList<ReviewItem> reviews = new ArrayList<>();
+
     private MovieItemBasic mMovie = new MovieItemBasic();
+
+    private int trailers_per_row = TMDBInfo.TRAILERS_PER_ROW_PORTRAIT;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +54,15 @@ public class MovieDetailsActivity extends AppCompatActivity implements ListItemC
         // Set up our <layout> enclosed layout with the data binding
         movieDetailsBinding = DataBindingUtil.setContentView(this, R.layout.activity_movie_details);
 
+        // Get the calling intent passed over
+        mMovie = MovieDetail.generateFromIntent(getIntent());
+
         // Set Layout Manager for Movie Trailers
-        movieDetailsBinding.movieTrailerView.setLayoutManager(new GridLayoutManager(this, TMDBInfo.NO_OF_TRAILERS_PER_ROW));
+
+        if ( !SysUtil.isPortrait(this) )
+            trailers_per_row = TMDBInfo.TRAILERS_PER_ROW_LANDSCAPE;
+
+        movieDetailsBinding.movieTrailerView.setLayoutManager(new GridLayoutManager(this, trailers_per_row));
         movieDetailsBinding.movieTrailerView.setHasFixedSize(true);
 
         // Set Layout Manager for movie Reviews
@@ -66,15 +77,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements ListItemC
         mReviewsAdapter = new ReviewRecyclerViewAdapter(reviews);
         movieDetailsBinding.movieReviewView.setAdapter(mReviewsAdapter);
 
-        // Get the calling intent passed over
-        mMovie = MovieDetail.generateFromIntent( getIntent() );
-
-        if ( !NetworkUtils.isNetworkAvailable(getApplicationContext()))
-            Toast.makeText(getApplicationContext(), getApplicationContext().getString(R.string.network_error_message), Toast.LENGTH_LONG).show();
-        else {
-            // Call a new task to obtain the run duration from the movies JSON using it's id and poster url
-            new TMDBDetailsLoader(getApplicationContext(),getSupportLoaderManager(),movieDetailsBinding,mMovie.getId(), mMovie.getPosterURL(), this);
-        }
+        if (!NetworkUtils.isNetworkAvailable(getApplicationContext()))
+            MovieDetail.showMessage(getApplicationContext(),getApplicationContext().getString(R.string.network_error_message), Toast.LENGTH_LONG);
+        else
+            new TMDBDetailsLoader(getApplicationContext(), getSupportLoaderManager(), movieDetailsBinding, mMovie.getId(), mMovie.getPosterURL(), this);
     }
 
     // Open YouTube Trailer via Intent

@@ -24,8 +24,6 @@ import static com.jasonbutwell.popularmovies.Api.TMDBInfo.REVIEWS;
 import static com.jasonbutwell.popularmovies.Api.TMDBInfo.TRAILERS;
 import static com.jasonbutwell.popularmovies.Api.TMDBInfo.YOUTUBE_BASE_URL;
 import static com.jasonbutwell.popularmovies.Api.TMDBInfo.YOUTUBE_THUMBNAIL;
-//import static com.jasonbutwell.popularmovies.Api.TMDBInfo.filterQuery;
-//import static com.jasonbutwell.popularmovies.Api.TMDBInfo.queryFilters;
 
 /**
  * Created by J on 21/01/2017.

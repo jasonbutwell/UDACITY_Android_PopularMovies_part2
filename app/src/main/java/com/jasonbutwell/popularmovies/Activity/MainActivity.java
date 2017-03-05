@@ -25,18 +25,21 @@ import com.jasonbutwell.popularmovies.Listener.MovieTaskCompleteListener;
 import com.jasonbutwell.popularmovies.Model.MovieItemBasic;
 import com.jasonbutwell.popularmovies.R;
 import com.jasonbutwell.popularmovies.Ui.MovieDetail;
+import com.jasonbutwell.popularmovies.Utils.SysUtil;
 import com.jasonbutwell.popularmovies.databinding.MoviePosterLayoutBinding;
 
 import java.util.ArrayList;
 
 import static com.jasonbutwell.popularmovies.Api.TMDBInfo.FIELD_SEPERATOR;
+import static com.jasonbutwell.popularmovies.Api.TMDBInfo.POSTERS_PER_ROW_LANDSCAPE;
+import static com.jasonbutwell.popularmovies.Api.TMDBInfo.POSTERS_PER_ROW_PORTRAIT;
 
 public class MainActivity extends AppCompatActivity implements ListItemClickListener, MovieTaskCompleteListener, CursorLoadCompleteListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     // IMPORTANT! - Replace API KEY in 'Api / APIKey.java' with your own 'TMDB API KEY'
+
     private String LIST_STATE_KEY = "saved_layout_manager";
     private String LIST_STATE_MOVIES = "movies_data";
-    private String LIST_STATE_CURSOR = "movies_cursor";
 
     private Parcelable mListState;
 
@@ -64,7 +67,12 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
 
         binding = DataBindingUtil.setContentView(this, R.layout.movie_poster_layout);
 
-        layoutManager = new GridLayoutManager(this, TMDBInfo.NO_OF_POSTERS_PER_ROW);
+        if(SysUtil.isPortrait(this))
+            layoutManager = new GridLayoutManager(this, POSTERS_PER_ROW_PORTRAIT);
+        else
+            layoutManager = new GridLayoutManager(this, POSTERS_PER_ROW_LANDSCAPE);
+
+        //layoutManager = new GridLayoutManager(this, TMDBInfo.NO_OF_POSTERS_PER_ROW);
 
         binding.moviePosterView.setLayoutManager(layoutManager);
         binding.moviePosterView.setHasFixedSize(true);
@@ -80,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
         if ( savedInstanceState == null)
             loadMovies();
     }
-    
+
     @Override
     public void onSaveInstanceState(Bundle state) {
         super.onSaveInstanceState(state);
@@ -115,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
 
         // Reload movies again if we navigate back and favourites is set
         if ( sortFilter.equals(TMDBInfo.MOVIE_FILTER_FAVOURITES))
-            loadMovies();
+          loadMovies();
 
         if (mListState != null)
           layoutManager.onRestoreInstanceState(mListState);

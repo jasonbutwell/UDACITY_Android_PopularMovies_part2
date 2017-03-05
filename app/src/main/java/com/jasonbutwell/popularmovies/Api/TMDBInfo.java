@@ -6,8 +6,13 @@ package com.jasonbutwell.popularmovies.Api;
 public class TMDBInfo {
 
     // How many recyclerView items per row - defaults
-    public static final int NO_OF_POSTERS_PER_ROW = 2;  // For the Recycler layout manager
-    public static final int NO_OF_TRAILERS_PER_ROW = 3; // For the Recycler's grid layout
+    public static final int POSTERS_PER_ROW_PORTRAIT = 2;   // For the Recycler layout manager
+    public static final int POSTERS_PER_ROW_LANDSCAPE = 4;
+
+    public static final int TRAILERS_PER_ROW_PORTRAIT = 3;  // For trailers recycler
+    public static final int TRAILERS_PER_ROW_LANDSCAPE = 4;
+
+    public static final int TRAILERS_PER_ROW = 3;           // For the Recycler's grid layout
 
     // String literals to facilitate easier extracting of fields from the JSON data
     public static final String MOVIE_ID = "id";

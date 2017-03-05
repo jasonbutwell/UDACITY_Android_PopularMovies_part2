@@ -1,5 +1,6 @@
 package com.jasonbutwell.popularmovies.Model;
 
+import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
@@ -24,13 +25,47 @@ public class MovieItem extends MovieItemBasic implements Parcelable {
 
     public MovieItem() {}
 
-    public MovieItem(String id, String originalTitle, String plotSynopsis, String userRating, String releaseDate, String posterURL) {
+    public MovieItem(String id, String originalTitle, String posterURL, String plotSynopsis, String userRating, String releaseDate, String runTime) {
         this.id = id;
         this.originalTitle = originalTitle;
+        this.posterURL = posterURL;
         this.plotSynopsis = plotSynopsis;
         this.userRating = userRating;
         this.releaseDate = releaseDate;
-        this.posterURL = posterURL;
+        this.runTime = runTime;
+    }
+
+    protected MovieItem(Parcel in) {
+        id = in.readString();
+        originalTitle = in.readString();
+        posterURL = in.readString();
+        plotSynopsis = in.readString();
+        userRating = in.readString();
+        releaseDate = in.readString();
+        runTime = in.readString();
+    }
+
+    public static final Creator<MovieItem> CREATOR = new Creator<MovieItem>() {
+        @Override
+        public MovieItem createFromParcel(Parcel in) {
+            return new MovieItem(in);
+        }
+
+        @Override
+        public MovieItem[] newArray(int size) {
+            return new MovieItem[size];
+        }
+    };
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(id);
+        parcel.writeString(originalTitle);
+        parcel.writeString(posterURL);
+        parcel.writeString(plotSynopsis);
+        parcel.writeString(userRating);
+        parcel.writeString(releaseDate);
+        parcel.writeString(runTime);
     }
 
     public int getTrailersSize() {
