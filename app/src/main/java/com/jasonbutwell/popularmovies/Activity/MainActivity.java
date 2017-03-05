@@ -85,6 +85,13 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
 
         setUpPreferences();
 
+        binding.loadingLayout.retryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                loadMovies();
+            }
+        });
+
         if ( savedInstanceState == null)
             loadMovies();
     }
@@ -200,7 +207,7 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
 
     // Do not touch this as it's called from the XML layout
     public void onErrorReload( View view ) {
-        //loadMovies();
+        loadMovies();
     }
 
     // gets a preference value based on its key

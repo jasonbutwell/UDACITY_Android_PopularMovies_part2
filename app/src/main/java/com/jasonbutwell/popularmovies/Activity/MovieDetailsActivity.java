@@ -1,5 +1,6 @@
 package com.jasonbutwell.popularmovies.Activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
@@ -10,7 +11,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.jasonbutwell.popularmovies.Adapter.ReviewRecyclerViewAdapter;
 import com.jasonbutwell.popularmovies.Adapter.TrailerRecyclerViewAdapter;
@@ -26,6 +26,7 @@ import com.jasonbutwell.popularmovies.Model.ReviewItem;
 import com.jasonbutwell.popularmovies.Model.TrailerItem;
 import com.jasonbutwell.popularmovies.Network.NetworkUtils;
 import com.jasonbutwell.popularmovies.R;
+import com.jasonbutwell.popularmovies.Ui.LoadingIndicator;
 import com.jasonbutwell.popularmovies.Ui.MovieDetail;
 import com.jasonbutwell.popularmovies.Utils.SysUtil;
 import com.jasonbutwell.popularmovies.databinding.ActivityMovieDetailsBinding;
@@ -77,10 +78,29 @@ public class MovieDetailsActivity extends AppCompatActivity implements ListItemC
         mReviewsAdapter = new ReviewRecyclerViewAdapter(reviews);
         movieDetailsBinding.movieReviewView.setAdapter(mReviewsAdapter);
 
-        if (!NetworkUtils.isNetworkAvailable(getApplicationContext()))
-            MovieDetail.showMessage(getApplicationContext(),getApplicationContext().getString(R.string.network_error_message), Toast.LENGTH_LONG);
-        else
+        movieDetailsBinding.loadingLayout.retryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                loadMovieDetails();
+            }
+        });
+
+        loadMovieDetails();
+    }
+
+    public void loadMovieDetails() {
+
+        Context mContext = getApplicationContext();
+        String errorMessage = mContext.getString(R.string.network_error_message);
+
+        // Check if we have a network connection
+        if ( !NetworkUtils.isNetworkAvailable(mContext)) {
+            LoadingIndicator.showError(movieDetailsBinding, true, errorMessage );           // if no network connection,
+        }                                                                       // show the error message and retry button
+        else {
+            LoadingIndicator.showError(movieDetailsBinding, false, "");                     // clear and hide the error message
             new TMDBDetailsLoader(getApplicationContext(), getSupportLoaderManager(), movieDetailsBinding, mMovie.getId(), mMovie.getPosterURL(), this);
+        }
     }
 
     // Open YouTube Trailer via Intent
