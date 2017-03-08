@@ -205,11 +205,6 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
         binding.moviePosterView.setAdapter(mFavAdapter);
     }
 
-    // Do not touch this as it's called from the XML layout
-    public void onErrorReload( View view ) {
-        loadMovies();
-    }
-
     // gets a preference value based on its key
     public String getPreferenceValue( SharedPreferences sharedPreferences, String key, int defaultValue ) {
         return sharedPreferences.getString(key,getResources().getString(defaultValue));
@@ -219,6 +214,16 @@ public class MainActivity extends AppCompatActivity implements ListItemClickList
     public void setFilter() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         sortFilter = getPreferenceValue(sharedPreferences, getString(R.string.pref_sortby_key), R.string.pref_sortby_option_value_popular);
+
+        // Set action bar title depending on which preference we currently have set
+        String[] labelArray = getResources().getStringArray(R.array.pref_sortby_option_labels);
+        String[] prefArray = getResources().getStringArray(R.array.pref_sortby_option_values);
+
+        for (int i=0; i < prefArray.length; i++)
+            if ( prefArray[i].equals(sortFilter)) {
+                setTitle(labelArray[i]);
+                break;
+            }
     }
 
     // This callback method is called when the Preference is changed so we can act on it

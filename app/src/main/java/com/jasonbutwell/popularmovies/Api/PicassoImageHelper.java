@@ -23,7 +23,8 @@ public class PicassoImageHelper {
             Picasso.with(context)
                     .load(imageURL)
                     .placeholder(placeHolderResource)
-                    .fit()
+                    .resize(800, 800)
+                    .centerInside()
                     .into(destination); // set the image thumbnail for the movie
         }
     }
